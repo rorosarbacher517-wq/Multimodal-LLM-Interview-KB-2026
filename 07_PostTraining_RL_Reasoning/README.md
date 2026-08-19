@@ -1,5 +1,7 @@
 # 07 · Post-training, RL & Multimodal Reasoning
 
+> Agent 的 MDP/POMDP、environment rollout、sparse reward、credit assignment、agent DPO/GRPO、curriculum 和 executable verifier 见 **[Agent RL & Sequential Decision Making](./AGENT_RL.md)**。
+
 ## Q1. SFT、DPO、RLHF、RLVR 分别解决什么？
 
 - **SFT**：学习正确示范和格式；
@@ -199,7 +201,7 @@ Agent reward 通常延迟很长：前 20 步都可能没有明确分数，最后
 - trajectory 很长；
 - rollout 成本高。
 
-因此需要 trajectory verifier、shaping reward、异步 rollout infrastructure。
+因此需要 trajectory verifier、shaping reward、异步 rollout infrastructure。完整 Agent RL 链路见 [Agent RL & Sequential Decision Making](./AGENT_RL.md)。
 
 ## Q20. 面试问“如何让模型少看图瞎猜”怎么答？
 
