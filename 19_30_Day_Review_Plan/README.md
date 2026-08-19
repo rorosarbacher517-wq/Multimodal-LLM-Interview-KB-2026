@@ -1,51 +1,55 @@
 # 19 · 30-Day Interview Review Plan
 
-> 默认每天 2–4 小时。时间更充足时，把“口述 + 手写 + 小实验”加倍，而不是一天刷更多新概念。
+> 默认每天 2–4 小时。视觉感知内容新增后，不建议简单延长到 40 天；更好的做法是把 Week 1 做成“Transformer + 完整视觉底座”，后面再进入 MLLM。
 
-## Week 1：把底层补齐
+## Week 1：Transformer + 完整视觉感知
 
 ### Day 1
 - Transformer 总体结构
-- Q/K/V
-- scaled attention
+- Q/K/V / scaled attention
 - 手写 attention
 
 ### Day 2
-- Multi-Head
-- mask
-- Pre-Norm / RMSNorm
-- SwiGLU
+- Multi-Head / mask
+- Pre-Norm / RMSNorm / SwiGLU
+- RoPE / GQA
 
 ### Day 3
-- RoPE
-- GQA/MQA
 - KV Cache
+- MoE / router / active params
 - 手算 KV 显存
 
 ### Day 4
-- MoE
-- router
-- active params
-- Expert Parallel 基础
-
-### Day 5
 - CNN vs ViT
-- patchify
-- position embedding
+- patchify / position encoding
+- CLIP / SigLIP / DINO
 - 手算视觉 token
 
+### Day 5
+- YOLOv8–11/26
+- DETR / RT-DETR
+- SAM / SAM2
+- GroundingDINO
+- 手算 P3/P4/P5 尺寸
+
 ### Day 6
-- CLIP / SigLIP / DINO
-- OCR / grounding
-- dynamic resolution
+- OCR detection / recognition / CTC
+- Layout / reading order
+- PaddleOCR-VL-1.6
+- MinerU2.5 / Pro
+- Document RAG
 
 ### Day 7
-- 闭卷画：Vision Encoder → Projector → LLM
-- 随机抽 20 题复盘
+- Pose：ViTPose / RTMPose
+- Tracking：ByteTrack / OC-SORT / CoTracker
+- Depth：Depth Anything V2
+- 3D：Point Cloud / BEV / DUSt3R / VGGT
+- 闭卷画完整 perception stack
 
-## Week 2：多模态模型 + 数据 + 训练
+## Week 2：MLLM 模型 + 数据 + 训练
 
 ### Day 8
+- Vision Encoder → Projector → LLM
 - LLaVA / Flamingo / BLIP-2
 - MLP / Q-Former / Resampler
 
@@ -66,6 +70,7 @@
 
 ### Day 13
 - 数据清洗、去重、质量打分、配比
+- OCR / detection / 3D pseudo-label data engine
 
 ### Day 14
 - Alignment → Pretraining → SFT
@@ -87,13 +92,16 @@
 - video tokenization
 - long video retrieval
 - temporal grounding
+- object/point tracking 与 video memory
 
 ### Day 18
-- Function Calling / MCP / RAG
+- Function Calling / MCP / Multimodal RAG
+- OCR / detector / depth 作为 perception tools
 
 ### Day 19
 - GUI Agent / VLA
 - action space / verifier
+- 2D/3D coordinate frame
 
 ### Day 20
 - DDP / ZeRO / FSDP2
@@ -118,30 +126,32 @@
 ### Day 24
 - vLLM / SGLang
 - multimodal serving
+- perception model + MLLM multi-service design
 - OOM diagnosis
 
 ### Day 25
-- MMMU / MathVista / OCR / grounding
+- MMMU / MathVista
+- OCR / grounding / tracking / depth metrics
 - perception vs reasoning diagnostics
 
 ### Day 26
-- System Design：PDF QA
-- System Design：长视频 QA
+- System Design：PDF QA / Document RAG
+- System Design：Grounded auto-labeling pipeline
 
 ### Day 27
-- System Design：GUI Agent
-- System Design：多租户 MLLM serving
+- System Design：长视频 QA + tracking
+- System Design：GUI/VLA + 3D perception
 
 ### Day 28
 - 项目介绍 90 秒 / 3 分钟 / 10 分钟三个版本
 - 准备 3 个 bug / failure case
 
 ### Day 29
-- 高频题 1–63，闭卷口述
-- 手写 5 题
+- 高频题闭卷口述：Transformer / Vision / Perception
+- 手写 IoU/NMS/Attention/LoRA
 
 ### Day 30
-- 高频题 64–126
+- 高频题闭卷口述：MLLM / Training / Agent / Systems
 - 完整模拟面试：基础 20 min + 项目 20 min + 系统设计 20 min
 
 ## 每天打卡模板
@@ -160,8 +170,9 @@
 不是“看完仓库”，而是：
 
 - 80% 高频题能在 2 分钟内说清；
-- 能不看资料画出典型 MLLM；
-- 能计算 attention / visual token / KV / LoRA 参数量；
+- 能画出 YOLO / SAM / OCR pipeline / tracker / depth-to-3D / 典型 MLLM；
+- 能计算 attention / visual token / detector feature map / KV / LoRA 参数量；
 - 能解释至少 6 个 2026 代表模型的核心差异；
+- 能说明什么时候用专用 perception model，什么时候直接用 MLLM；
 - 能设计一个端到端多模态系统；
 - 项目追问 3 层后仍然能说到真实代码、数据和实验。
