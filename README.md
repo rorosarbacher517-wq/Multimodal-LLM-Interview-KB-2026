@@ -10,7 +10,7 @@
 
 本仓库按真实算法面试的思路组织：
 
-**原理 → 视觉感知 → 多模态架构 → 数据 → 训练 → RL/Reasoning → Agent → 分布式 → Serving → 评测 → 系统设计。**
+**深度学习基础 → Transformer/LLM → 视觉感知 → 多模态架构 → 数据 → 训练 → RL/Reasoning → Agent → 分布式 → Serving → 评测 → 系统设计。**
 
 每个问题尽量控制在 1–3 分钟可以讲清，同时保留继续追问所需的公式、shape、工程细节和常见误区。
 
@@ -19,7 +19,8 @@
 | 模块 | 重点 | 题量 |
 |---|---|---:|
 | [00 Roadmap](./00_Roadmap/README.md) | 学习顺序与知识地图 | — |
-| [01 Transformer & LLM Fundamentals](./01_Transformer_LLM_Fundamentals/README.md) | Attention、RoPE、GQA、MoE、KV Cache | 18 |
+| [00B Deep Learning Fundamentals](./00B_Deep_Learning_Fundamentals/README.md) | Tensor、反向传播、Loss、Optimizer、Norm、Residual、CNN/RNN、Mixed Precision | 57 |
+| [01 Transformer & LLM Fundamentals](./01_Transformer_LLM_Fundamentals/README.md) | Tokenizer、Embedding、Attention、RoPE、GQA、KV Cache、Decoding、MoE | 65 |
 | [02 Vision Fundamentals](./02_Vision_Fundamentals/README.md) | CNN、ViT、CLIP、SigLIP、DINO、视觉 token | 16 |
 | [02B Detection / Segmentation / Grounding](./02B_Detection_Segmentation_Grounding/README.md) | YOLO、DETR、SAM2、GroundingDINO、Grounded SAM | 22 |
 | [02C OCR / Document AI](./02C_OCR_Document_AI/README.md) | OCR、Layout、Table/Formula、PaddleOCR-VL、MinerU、Document RAG | 15 |
@@ -39,12 +40,31 @@
 | [14 System Design](./14_System_Design/README.md) | 多模态搜索、文档 QA、视频 QA、GUI Agent 等 | 15 |
 | [15 Project Interview](./15_Project_Interview/README.md) | 项目介绍、消融、数据闭环、故障排查 | 12 |
 | [16 高频题索引](./16_High_Frequency_Interview/README.md) | 通用大模型 / MLLM 高频题 | 100+ |
+| [16A Deep Learning & Transformer 高频题](./16A_Deep_Learning_Transformer_High_Frequency/README.md) | 深度学习与 Transformer 基础闭卷 | 50 |
 | [16B Visual Perception 高频题](./16B_Visual_Perception_High_Frequency/README.md) | OCR、Pose、Tracking、Depth、3D 闭卷复习 | 45 |
 | [17 2026-08 技术快照](./17_2026_Snapshot/README.md) | 最新模型与技术趋势 | — |
 | [18 Primary References](./18_References/README.md) | 原论文 / 官方 GitHub / 官方文档 | — |
 | [19 30-Day Review Plan](./19_30_Day_Review_Plan/README.md) | 30 天冲刺复习计划 | — |
 
-当前核心模块约 **327 道问答**，另有通用高频索引和 **45 道视觉感知专项高频题**。
+当前核心知识问答已超过 **430 个**，另有通用、高频基础和视觉感知专项闭卷题。
+
+## 为什么把 Deep Learning 单独放在 Transformer 前面
+
+Transformer 并不是一套与深度学习无关的独立知识。下面这些问题都会反复出现：
+
+```text
+Tensor shape
+Matrix multiplication
+Forward / Backward
+Cross Entropy
+AdamW / Learning Rate
+Normalization
+Residual Connection
+Mixed Precision
+Memory / Gradient
+```
+
+如果这些基础不稳，Q/K/V、Pre-Norm、SwiGLU、LoRA、FSDP、FlashAttention 很容易变成死记硬背。因此建议先通过 `00B` 的基础闭卷题，再进入 `01`。
 
 ## 视觉感知层为什么单独补全
 
@@ -69,12 +89,12 @@ MLLM / Agent / VLA
 
 ### 模型结构题
 
-1. **输入是什么？** 例如 `[B,3,H,W]`、视频 `[B,T,3,H,W]`、点云 `[N,C]`。
-2. **怎么变成 feature/token？** 输出 shape 是什么。
-3. **空间分辨率怎么变化？** stride / patch / voxel / BEV 如何改变维度。
-4. **最终输出是什么？** text、box、mask、keypoint、depth、track、point cloud 还是 action。
-5. **怎么训练？** loss、matching、预训练、SFT/RL，各阶段哪些参数冻结。
-6. **怎么算成本？** token、feature map、KV cache、3D sparse tensor、并行通信。
+1. **输入是什么？** 例如 `[B,L,D]`、`[B,3,H,W]`、`[B,T,3,H,W]`、点云 `[N,C]`。
+2. **shape 怎么变？** Linear / Conv / Patchify / Attention / Projector 每一步写清楚。
+3. **为什么需要这个模块？** 它解决表达能力、优化稳定性还是计算成本？
+4. **最终输出是什么？** logits、text、box、mask、keypoint、depth、track、point cloud 还是 action。
+5. **怎么训练？** loss、matching、optimizer、预训练、SFT/RL，各阶段哪些参数更新。
+6. **怎么算成本？** 参数、activation、KV cache、visual token、feature map、3D sparse tensor、通信。
 
 ### 数据题
 
@@ -87,18 +107,19 @@ MLLM / Agent / VLA
 ## 可信度规则
 
 - 最新模型只采用 **论文、官方 GitHub、官方技术报告、官方文档** 可确认的信息。
-- 对 GPT / Gemini / Claude 等闭源模型，**公开能力不等于公开内部架构**；官方未披露的 vision encoder、projector、训练数据和 loss 不猜。
+- 对 GPT / Gemini / Claude 等闭源模型，**公开能力不等于公开内部架构**；官方未披露的内部模块不猜。
+- 基础原理以经典论文、教材和框架官方文档为准；具体模型实现以官方源码为准。
 - benchmark 数字会随评测设置变化；仓库重点解释机制，不靠排行榜背诵。
-- 对 2026 新模型，明确区分“官方公开”“论文结果”“工程推断”。
 
 ## 推荐使用方式
 
-- **第一遍**：00 → 01 → 02 → 02B/02C/02D/02E → 03，先打通底层和视觉感知。
-- **第二遍**：04 → 05 → 06 → 07，掌握 2026 多模态主线。
-- **第三遍**：08 → 09 → 10 → 11，补 Agent 与工程。
-- **第四遍**：13 手写 + 14 系统设计 + 15 项目面试。
-- **面试前**：16 通用高频题 + 16B 视觉感知高频题 + 17 技术快照。
+- **基础层**：00B Deep Learning → 01 Transformer/LLM。
+- **视觉层**：02 Vision → 02B Detection → 02C OCR → 02D Tracking → 02E Depth/3D。
+- **多模态层**：03 Architecture → 04 Models → 05 Data → 06 Training → 07 RL。
+- **工程层**：08 Omni → 09 Agent → 10 Distributed → 11 Serving。
+- **面试化**：12 Evaluation → 13 Handwriting → 14 System Design → 15 Project。
+- **面试前**：16 + 16A + 16B + 17。
 
 ## Status
 
-**2026-08 Final Interview Edition + Full Visual Perception Stack.** 后续更新只补新增的重要模型、论文和真实面试问题，不为凑数量添加低价值题。
+**2026-08 Final Interview Edition + Deep Learning Foundations + Full Visual Perception Stack.**
