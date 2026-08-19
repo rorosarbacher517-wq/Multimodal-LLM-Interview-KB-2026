@@ -3,10 +3,11 @@
 ## 一张图理解整个知识链
 
 ```text
-数学直觉 / PyTorch Tensor
+Math Fundamentals for AI
+Vector / Matrix / Gradient / Probability / Information Theory / Optimization
     ↓
 Deep Learning Fundamentals
-Forward / Backward / Loss / Optimizer / Norm / Residual / Mixed Precision
+Tensor / Forward / Backward / Loss / Optimizer / Norm / Residual / Mixed Precision
     ↓
 Transformer / LLM
 Tokenizer / Embedding / Attention / RoPE / GQA / KV Cache / MoE
@@ -33,9 +34,67 @@ FSDP / TP / PP / EP → vLLM / SGLang
 Evaluation / System Design / Project Interview
 ```
 
-## 第零层：Deep Learning 基础必须先补齐
+## 第零层 A：AI 数学基础
 
-在进入 Transformer 之前，至少要能解释：
+进入深度学习前，不需要重新学一整套大学数学，但下面这些必须能解释：
+
+### 线性代数
+
+- scalar / vector / matrix / tensor；
+- dot product；
+- L1 / L2 norm；
+- cosine similarity；
+- matrix multiplication / transpose；
+- rank / low-rank；
+- projection / orthogonality；
+- eigenvalue / eigenvector；
+- SVD / PCA。
+
+### 微积分
+
+- derivative / partial derivative；
+- gradient；
+- chain rule；
+- Jacobian；
+- Hessian 的直觉；
+- gradient descent。
+
+### 概率统计
+
+- conditional probability；
+- Bayes rule；
+- expectation / variance / covariance；
+- Bernoulli / categorical / Gaussian；
+- MLE / MAP；
+- bias / variance。
+
+### 信息论与数值稳定
+
+- entropy；
+- cross entropy；
+- KL divergence；
+- mutual information；
+- log / exp；
+- log-sum-exp；
+- softmax stability。
+
+对应模块：[00A Math Fundamentals for AI](../00A_Math_Fundamentals_for_AI/README.md)
+
+这些概念会直接映射到：
+
+```text
+dot product          → Attention / CLIP
+cosine similarity    → Embedding Retrieval
+low rank / SVD       → LoRA / Compression
+gradient / chain rule→ Backpropagation
+probability / MLE    → Language Modeling
+entropy / KL         → CE / Distillation / RL
+matrix transform     → 3D / BEV / VLA
+```
+
+## 第零层 B：Deep Learning 基础
+
+在进入 Transformer 之前，还要能解释：
 
 - Tensor shape 和 matrix multiplication；
 - broadcasting；
@@ -51,9 +110,7 @@ Evaluation / System Design / Project Interview
 - FP16 / BF16 / mixed precision；
 - parameter / gradient / optimizer / activation 显存。
 
-对应模块： [00B Deep Learning Fundamentals](../00B_Deep_Learning_Fundamentals/README.md)
-
-如果这些不熟，后面的 Pre-Norm、SwiGLU、LoRA、FSDP、FlashAttention 很容易只剩名词。
+对应模块：[00B Deep Learning Fundamentals](../00B_Deep_Learning_Fundamentals/README.md)
 
 ## 第一层：Transformer / LLM 必须能从零画出来
 
@@ -90,7 +147,7 @@ Next Token
 - dense / sliding-window / linear-recurrent attention；
 - MoE routing / active parameters。
 
-对应模块： [01 Transformer & LLM Fundamentals](../01_Transformer_LLM_Fundamentals/README.md)
+对应模块：[01 Transformer & LLM Fundamentals](../01_Transformer_LLM_Fundamentals/README.md)
 
 ## 第二层：视觉感知底座必须完整
 
@@ -180,6 +237,7 @@ Text / Coordinates / Tool Call / Action
 
 至少会算：
 
+- cosine similarity；
 - Linear 参数量；
 - Attention QKV shape；
 - KV cache；
@@ -205,23 +263,23 @@ Text / Coordinates / Tool Call / Action
 
 ## 最推荐的复习顺序
 
-### Phase 1：真正的底层
+### Phase 0：数学和深度学习底层
 
-**00B Deep Learning → 01 Transformer/LLM**
+**00A Math → 00B Deep Learning → 01 Transformer/LLM**
 
-### Phase 2：视觉感知
+### Phase 1：视觉感知
 
 **02 Vision → 02B Detection → 02C OCR → 02D Pose/Tracking → 02E Depth/3D**
 
-### Phase 3：多模态模型
+### Phase 2：多模态模型
 
 **03 Architecture → 04 Models → 05 Data → 06 Pretrain/SFT → 07 RL**
 
-### Phase 4：Agent 与工程
+### Phase 3：Agent 与工程
 
 **08 Video/Omni → 09 Agent → 10 Distributed → 11 Serving**
 
-### Phase 5：面试化
+### Phase 4：面试化
 
 **12 Evaluation → 13 Handwriting → 14 System Design → 15 Project → 16/16A/16B 高频题**
 
@@ -231,7 +289,7 @@ Text / Coordinates / Tool Call / Action
 
 1. 输入是什么？
 2. tensor / token / feature shape 怎么变？
-3. 核心计算是什么？
+3. 核心数学是什么？
 4. 为什么需要这个结构？
 5. loss 怎么定义？
 6. 参数怎么更新？
