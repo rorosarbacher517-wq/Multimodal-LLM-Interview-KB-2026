@@ -96,16 +96,46 @@ DPO/PPO/GRPO/RLVR；advantage/KL；rollout/verifier；active perception；reward
 ### Day 21 — Safety
 indirect prompt injection；RAG poisoning；tool permissions；confirmation/sandbox；red team；agent audit log。
 
-## Week 4 · RAG / Agent / Distributed / Serving / Interview
+## Week 4 · Retrieval / Agent / Distributed / Serving / Interview
 
 ### Day 22 — Retrieval / RAG
 BM25 + dense embedding；HNSW/IVF-PQ；hybrid recall；reranker；retrieval vs generation diagnostics。
 
-### Day 23 — Agent / GUI / VLA
-function call/MCP；planning/memory；GUI grounding；VLA action representation；closed-loop verification。
+### Day 23 — Agent Core / Tool / Memory / Protocol
+重点学习 [09B Agent Fundamentals & Engineering](../09B_Agent_Fundamentals_Engineering/README.md)：
+- Chatbot vs Workflow vs Agent；
+- Agent Loop / stop condition；
+- function call / tool schema / routing；
+- timeout / retry / idempotency；
+- ReAct / plan-execute / planner-executor-verifier；
+- working/episodic/semantic memory；
+- context compaction / externalized state；
+- Function Calling vs MCP vs A2A。
 
-### Day 24 — Video / Omni
-long-video retrieval；temporal grounding；streaming ASR/audio；full-duplex/interruption。
+当天闭卷完成 [16C Agent 高频题](../16C_Agent_High_Frequency/README.md) 的前 40 题。
+
+### Day 24 — Web / GUI / Coding Agent / Omni
+- DOM + screenshot；
+- GUI grounding；
+- Coding Agent：inspect → edit → test → repair → verify；
+- sandbox / least privilege；
+- checkpoint / resume / durable execution；
+- Agent evaluation / OSWorld；
+- long-video retrieval；
+- full-duplex / interruption。
+
+完成 16C 剩余题目，并从零画：
+
+```text
+Goal
+→ Agent Harness
+→ Planner / Model
+→ Tools / Remote Agents
+→ Environment
+→ Observation
+→ Verifier
+→ Continue / Replan / Stop
+```
 
 ### Day 25 — Distributed Training
 DDP/FSDP/ZeRO；TP/PP/EP/SP/CP；1F1B；topology；communication overlap；straggler。
@@ -114,10 +144,10 @@ DDP/FSDP/ZeRO；TP/PP/EP/SP/CP；1F1B；topology；communication overlap；strag
 vLLM/SGLang；PagedAttention；continuous batching；chunked prefill；disaggregation；quantization/cache/admission control。
 
 ### Day 27 — Evaluation
-benchmark buckets；perception vs reasoning；bootstrap CI/paired test；calibration/OOD；cost-normalized eval。
+benchmark buckets；perception vs reasoning；bootstrap CI/paired test；calibration/OOD；cost-normalized eval；Agent task success / recovery / safety。
 
 ### Day 28 — Code + System Design
-Attention/LoRA/IoU-NMS/Patchify；PDF QA/Video QA/GUI Agent/MLLM serving，至少做 2 道完整系统设计。
+Attention/LoRA/IoU-NMS/Patchify；PDF QA/Video QA/GUI Agent/MLLM serving，至少做 2 道完整系统设计，其中至少一道 Agent 系统题必须包含 state、tool、verifier、sandbox、checkpoint。
 
 ### Day 29 — Project Interview
 准备项目 90 秒/3 分钟/10 分钟；3 个 controlled ablation；3 个 bad cases；2 个真实 bug/OOM；个人贡献边界。
@@ -125,9 +155,9 @@ Attention/LoRA/IoU-NMS/Patchify；PDF QA/Video QA/GUI Agent/MLLM serving，至�
 ### Day 30 — Full Mock
 - fundamentals 20 min；
 - model/data/training 20 min；
+- Agent / system 20 min；
 - project 20 min；
 - code 20 min；
-- system design 20 min；
 - 当天只复盘暴露出的短板。
 
 ---
@@ -146,4 +176,5 @@ Attention/LoRA/IoU-NMS/Patchify；PDF QA/Video QA/GUI Agent/MLLM serving，至�
 - 能从 shape 推导模型，不靠背图；
 - 能区分 confirmed fact 和未公开实现；
 - 能从 data/model/training/system 四层定位 bad case；
-- 能设计一个可部署、可评测、可安全回滚的端到端多模态系统。
+- 能设计一个可部署、可评测、可安全回滚的端到端多模态系统；
+- 能设计一个包含 **tool / state / memory / verifier / permission / sandbox / checkpoint** 的 production Agent。

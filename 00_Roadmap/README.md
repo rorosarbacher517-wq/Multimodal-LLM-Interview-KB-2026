@@ -22,7 +22,11 @@
                       ↓
 05 Data → 06 Train → 07 RL → 07B Safety
                       ↓
-08 Omni / 09 RAG-Agent-VLA / 09A Retrieval
+09A Retrieval → 09 RAG/GUI/VLA
+                      ↓
+09B Agent Core: Loop/Tool/Planning/Memory/MCP/A2A
+                      ↓
+Web / GUI / Coding Agent / VLA / 08 Omni
                       ↓
 10 Distributed → 11 Serving
                       ↓
@@ -75,14 +79,39 @@
 - rollout/verifier；
 - multimodal prompt injection 与 tool safety。
 
-## Phase 5：Agent / RAG / Omni
-学习 08/08A → 09/09A。
+## Phase 5：Retrieval → Agent → GUI / VLA / Omni
+推荐顺序：
 
-能画：
+[09A Retrieval](../09A_Retrieval_Vector_Search/README.md)
+→ [09 RAG / GUI / VLA](../09_RAG_Tools_Agents_GUI_VLA/README.md)
+→ [09B Agent Fundamentals & Engineering](../09B_Agent_Fundamentals_Engineering/README.md)
+→ [08 Video / Audio / Omni](../08_Video_Audio_Omni/README.md)
+
+必须能画：
+
 ```text
-perceive → retrieve/tool → reason → policy check → act → observe → verify
+Goal
+→ Observe
+→ Retrieve / Tool
+→ Plan
+→ Policy / Permission Check
+→ Act
+→ Environment Changes
+→ Observe Again
+→ Verify
+→ Continue / Replan / Stop
 ```
-并解释 BM25/HNSW/reranker、GUI grounding、VLA action representation、full-duplex streaming。
+
+通过标准：
+- 能区分 Chatbot / Workflow / Agent；
+- 能解释 Function Calling / MCP / A2A 的层次关系；
+- 能解释 planner / executor / verifier；
+- 能设计 working/episodic/semantic memory 与 externalized state；
+- 能说明 timeout / retry / idempotency / checkpoint / resume；
+- 能设计 Web / GUI / Coding Agent；
+- 能解释 prompt injection、least privilege、sandbox；
+- 能从 task success / latency / cost / safety 四层评测 Agent；
+- 能解释 GUI grounding、VLA action representation、full-duplex streaming。
 
 ## Phase 6：大规模工程
 学习 10 → 11。
@@ -98,16 +127,16 @@ perceive → retrieve/tool → reason → policy check → act → observe → v
 - quantization / cache / admission control。
 
 ## Phase 7：面试化
-12 Evaluation → 13 Code → 14 System Design → 15 Project → 16/16A/16B。
+12 Evaluation → 13 Code → 14 System Design → 15 Project → 16/16A/16B/[16C Agent 高频题](../16C_Agent_High_Frequency/README.md)。
 
 ## 判断自己是否真的掌握
-对任何新模型，优先回答九个问题：
-1. 输入是什么？
-2. 表示/shape 如何变化？
-3. 核心计算是什么？
+对任何新模型或 Agent 系统，优先回答九个问题：
+1. 输入/Goal 是什么？
+2. 表示/shape 或 state 如何变化？
+3. 核心计算/decision loop 是什么？
 4. 为什么这样设计？
-5. loss/reward 怎么来？
-6. train 与 inference 有何不同？
-7. memory/compute/latency 花在哪里？
-8. bad case 如何定位？
+5. loss/reward/verifier 怎么来？
+6. train 与 inference/execution 有何不同？
+7. memory/compute/latency/cost 花在哪里？
+8. bad case 如何定位、恢复和验证？
 9. 哪些细节是官方确认、哪些没有公开？

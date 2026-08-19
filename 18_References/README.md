@@ -1,6 +1,8 @@
 # 18 · Primary References
 
 > 原则：基础知识优先原论文/教材/框架官方文档；快速变化的模型优先官方 GitHub/model card。第三方文章只用于发现线索，不用于确认内部结构。
+>
+> Agent / Tool Use / MCP / A2A / Computer-Use 的专项 primary sources 见 **[AGENT.md](./AGENT.md)**。
 
 ## A. Math / ML / Deep Learning
 - Deep Learning book — https://www.deeplearningbook.org/
@@ -147,6 +149,17 @@
 - MathVista — https://arxiv.org/abs/2310.02255
 - LongVideoBench — https://arxiv.org/abs/2407.15754
 - OSWorld — https://arxiv.org/abs/2404.07972
+- OSWorld 2.0 — https://arxiv.org/abs/2606.29537
+
+## Q. Agent / Tool / Protocol
+- [Agent primary-source list](./AGENT.md)
+- ReAct — https://arxiv.org/abs/2210.03629
+- MCP — https://modelcontextprotocol.io/
+- MCP 2026-07-28 — https://blog.modelcontextprotocol.io/posts/2026-07-28/
+- Google A2A — https://developers.googleblog.com/en/a2a-a-new-era-of-agent-interoperability/
+- OpenAI Agents SDK 2026 runtime — https://openai.com/index/the-next-evolution-of-the-agents-sdk/
+- BrowserGym — https://arxiv.org/abs/2412.05467
+- SWE-agent — https://arxiv.org/abs/2405.15793
 
 ---
 

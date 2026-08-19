@@ -1,6 +1,8 @@
 # 14 · Multimodal System Design
 
 > 系统设计题统一按：**需求/SLO → 数据流 → 模型 → 检索/工具 → serving → 评测 → 风险/降级**。
+>
+> Research Agent、Coding Agent、Multi-Agent、Long-Horizon Runtime、Agent Data Platform、Tool Gateway 等专项题见 **[Agent System Design Cases](./AGENT_SYSTEM_DESIGN.md)**。
 
 ## Q1. 设计一个企业 PDF 多模态问答系统
 
@@ -56,7 +58,7 @@ screenshot/DOM
 → retry/replan
 ```
 
-高风险动作：支付、删除、发送邮件前必须加 policy/confirmation。
+高风险动作：支付、删除、发送邮件前必须加 policy/confirmation。更完整的 production Agent 设计见 [Agent System Design Cases](./AGENT_SYSTEM_DESIGN.md)。
 
 ## Q5. 设计实时语音视频助手
 
