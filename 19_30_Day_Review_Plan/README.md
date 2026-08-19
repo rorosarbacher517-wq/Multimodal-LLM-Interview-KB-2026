@@ -1,50 +1,76 @@
 # 19 · 30-Day Interview Review Plan
 
-> 默认每天 2–4 小时。视觉感知内容新增后，不建议简单延长到 40 天；更好的做法是把 Week 1 做成“Transformer + 完整视觉底座”，后面再进入 MLLM。
+> 默认每天 2–4 小时。现在基础层已经扩展为 **Deep Learning → Transformer → Vision/Perception → MLLM**，所以 Week 1 不再从 Q/K/V 直接开始。
 
-## Week 1：Transformer + 完整视觉感知
+## Week 1：Deep Learning + Transformer + 视觉底座
 
-### Day 1
-- Transformer 总体结构
-- Q/K/V / scaled attention
+### Day 1 · Tensor / Autograd / Loss
+- Tensor shape / matmul / broadcasting
+- Forward / computational graph
+- Gradient / chain rule / backward
+- MSE / MAE / Cross Entropy / BCE / KL
+- PyTorch `requires_grad / grad / zero_grad`
+- 闭卷手推一个两层 MLP 的 shape
+
+### Day 2 · Optimization / Stability / Memory
+- ReLU / GELU / SiLU
+- SGD / Momentum / Adam / AdamW
+- warmup / cosine / weight decay
+- LayerNorm / RMSNorm / BatchNorm
+- residual connection
+- FP16 / BF16 / mixed precision
+- gradient accumulation / clipping
+- activation checkpointing
+- 粗算 parameter / gradient / optimizer / activation memory
+
+### Day 3 · Tokenizer → Attention
+- BPE / SentencePiece
+- vocabulary / BOS / EOS / PAD
+- embedding `[B,L] → [B,L,D]`
+- hidden state / logits / probability
+- Q/K/V
+- scaled dot-product attention
+- Multi-Head reshape
+- causal mask / padding mask
 - 手写 attention
 
-### Day 2
-- Multi-Head / mask
-- Pre-Norm / RMSNorm / SwiGLU
-- RoPE / GQA
-
-### Day 3
+### Day 4 · Transformer Block → LLM Inference
+- Pre-Norm / RMSNorm / residual
+- FFN / SwiGLU
+- RoPE
+- MHA / MQA / GQA
 - KV Cache
+- teacher forcing / next-token loss
+- prefill / decode
+- top-k / top-p / temperature
 - MoE / router / active params
-- 手算 KV 显存
+- 手算 KV cache
 
-### Day 4
+### Day 5 · Vision + Detection / Segmentation / Grounding
 - CNN vs ViT
-- patchify / position encoding
+- patchify / visual token
 - CLIP / SigLIP / DINO
-- 手算视觉 token
-
-### Day 5
-- YOLOv8–11/26
-- DETR / RT-DETR
+- YOLO / DETR / RT-DETR
 - SAM / SAM2
 - GroundingDINO
-- 手算 P3/P4/P5 尺寸
+- 手算 P3/P4/P5 和 ViT token 数
 
-### Day 6
+### Day 6 · OCR / Document + Pose / Tracking
 - OCR detection / recognition / CTC
 - Layout / reading order
-- PaddleOCR-VL-1.6
-- MinerU2.5 / Pro
+- PaddleOCR-VL / MinerU
+- ViTPose / RTMPose
+- ByteTrack / OC-SORT / CoTracker
 - Document RAG
 
-### Day 7
-- Pose：ViTPose / RTMPose
-- Tracking：ByteTrack / OC-SORT / CoTracker
-- Depth：Depth Anything V2
-- 3D：Point Cloud / BEV / DUSt3R / VGGT
-- 闭卷画完整 perception stack
+### Day 7 · Depth / 3D + 全基础闭卷
+- relative / metric depth
+- Depth Anything
+- camera intrinsics / extrinsics
+- point / voxel / pillar / BEV
+- DUSt3R / MASt3R / VGGT
+- 闭卷画：`Deep Learning training loop → Transformer → Perception → MLLM`
+- 抽 30 道 16A/16B 高频题
 
 ## Week 2：MLLM 模型 + 数据 + 训练
 
@@ -144,15 +170,16 @@
 
 ### Day 28
 - 项目介绍 90 秒 / 3 分钟 / 10 分钟三个版本
-- 准备 3 个 bug / failure case
+- 准备 3 个真实 bug / failure case
 
 ### Day 29
-- 高频题闭卷口述：Transformer / Vision / Perception
-- 手写 IoU/NMS/Attention/LoRA
+- 16A：Deep Learning / Transformer 高频题闭卷
+- 16B：Visual Perception 高频题闭卷
+- 手写 Attention / IoU-NMS / LoRA
 
 ### Day 30
-- 高频题闭卷口述：MLLM / Training / Agent / Systems
-- 完整模拟面试：基础 20 min + 项目 20 min + 系统设计 20 min
+- 通用 MLLM / Training / Agent / Systems 高频题
+- 完整模拟：基础 20 min + 项目 20 min + 系统设计 20 min
 
 ## 每天打卡模板
 
@@ -160,7 +187,7 @@
 [ ] 今日新知识点
 [ ] 5 道闭卷口述
 [ ] 1 道手写 / shape 推导
-[ ] 1 个真实模型源码/官方文档核对
+[ ] 1 个真实源码/原论文核对
 [ ] 记录 3 个不会的问题
 [ ] 第二天优先复盘不会的问题
 ```
@@ -169,10 +196,11 @@
 
 不是“看完仓库”，而是：
 
+- Deep Learning / Transformer 基础不依赖背稿也能解释；
 - 80% 高频题能在 2 分钟内说清；
+- 能推导 Linear / Conv / Attention / KV Cache 的 shape；
+- 能解释 forward → loss → backward → optimizer 的完整训练链；
 - 能画出 YOLO / SAM / OCR pipeline / tracker / depth-to-3D / 典型 MLLM；
 - 能计算 attention / visual token / detector feature map / KV / LoRA 参数量；
-- 能解释至少 6 个 2026 代表模型的核心差异；
-- 能说明什么时候用专用 perception model，什么时候直接用 MLLM；
 - 能设计一个端到端多模态系统；
 - 项目追问 3 层后仍然能说到真实代码、数据和实验。
