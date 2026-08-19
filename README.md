@@ -22,7 +22,11 @@ Multimodal Core Architecture
   ↓
 Data → Pretraining/SFT → RL/Post-training → Safety
   ↓
-RAG / Vector Search / Tools / GUI / VLA / Omni
+Retrieval / RAG
+  ↓
+Agent Core: Loop / Tool / Planning / Memory / MCP / A2A
+  ↓
+Web / GUI / Coding Agent / VLA / Omni
   ↓
 Distributed Training → Serving
   ↓
@@ -76,13 +80,14 @@ Evaluation → Code → System Design → Project Interview
 | [07 Advanced RL](./07_PostTraining_RL_Reasoning/ADVANCED.md) | Policy Gradient、GAE、PPO Clip、KL、Rollout Infra、Verifier |
 | [07B Safety & Reliability](./07B_Multimodal_Safety_Reliability/README.md) | Prompt Injection、Tool Permission、Sandbox、PII、Red Team、Audit |
 
-# 5. Agent / Retrieval / Omni
+# 5. Retrieval / Agent / Omni
 
 | 模块 | 核心内容 |
 |---|---|
-| [08 Video / Audio / Omni](./08_Video_Audio_Omni/README.md) | Long Video、Temporal Alignment、Streaming、Full Duplex |
-| [09 RAG / Tools / Agents / GUI / VLA](./09_RAG_Tools_Agents_GUI_VLA/README.md) | Function Call、MCP、GUI Agent、Memory、Planning、VLA |
 | [09A Retrieval & Vector Search](./09A_Retrieval_Vector_Search/README.md) | BM25、Embedding、HNSW、IVF/PQ、Hybrid Retrieval、Reranker |
+| [09 RAG / Tools / GUI / VLA](./09_RAG_Tools_Agents_GUI_VLA/README.md) | Multimodal RAG、Function Call、GUI grounding、VLA 应用层 |
+| [09B Agent Fundamentals & Engineering](./09B_Agent_Fundamentals_Engineering/README.md) | Agent Loop、Tool、Planning、Memory、Multi-Agent、MCP/A2A、Sandbox、Checkpoint、Eval |
+| [08 Video / Audio / Omni](./08_Video_Audio_Omni/README.md) | Long Video、Temporal Alignment、Streaming、Full Duplex |
 
 # 6. Large-scale Systems
 
@@ -106,6 +111,7 @@ Evaluation → Code → System Design → Project Interview
 | [16 高频题索引](./16_High_Frequency_Interview/README.md) | 通用 MLLM 高频题 |
 | [16A Math/DL/Transformer 高频题](./16A_Deep_Learning_Transformer_High_Frequency/README.md) | 基础闭卷 |
 | [16B Visual Perception 高频题](./16B_Visual_Perception_High_Frequency/README.md) | 视觉专项闭卷 |
+| [16C Agent 高频题](./16C_Agent_High_Frequency/README.md) | Agent / Tool / Memory / Protocol / GUI / Coding / Safety 专项闭卷 |
 | [17 2026-08 技术快照](./17_2026_Snapshot/README.md) | 只保留有 primary source 的快速变化 |
 | [18 Primary References](./18_References/README.md) | 论文 / 官方 GitHub / 官方文档 |
 | [19 30-Day Plan](./19_30_Day_Review_Plan/README.md) | 面试冲刺路线 |
@@ -122,6 +128,15 @@ Evaluation → Code → System Design → Project Interview
 5. train 与 inference 有什么区别？
 6. compute / memory / latency 花在哪里？
 7. 和上一代方法相比改变了什么假设？
+
+## Agent 题
+1. Goal / environment / action space 是什么？
+2. Agent Loop 如何闭环？
+3. Tool schema 和 state 如何组织？
+4. Planning / memory / verifier 放在哪里？
+5. failure 如何 retry / replan / resume？
+6. permission / sandbox / prompt injection 如何处理？
+7. task success、latency、cost 如何评估？
 
 ## 数据题
 **能力目标 → 错误定义 → 寻源 → 解析 → 清洗 → 去重 → 质量 → 配比 → 训练反馈 → 再迭代。**
