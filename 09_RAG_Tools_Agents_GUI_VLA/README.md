@@ -1,4 +1,8 @@
-# 09 · Multimodal RAG, Tools, Agents, GUI & VLA
+# 09 · Multimodal RAG, Tools, GUI & VLA
+
+> 本页保留 **RAG / GUI / VLA 的应用层入口**。Agent 的底层循环、Planning、Memory、Multi-Agent、MCP/A2A、Agent RL、Sandbox、Checkpoint 和 Production Runtime 已独立放到：
+>
+> **[09B · Agent Fundamentals & Engineering](../09B_Agent_Fundamentals_Engineering/README.md)**。
 
 ## Q1. 普通 VQA 和 Multimodal Agent 的本质区别？
 
@@ -52,11 +56,17 @@ SFT 样本包含：
 
 ## Q5. MCP 和普通 Function Calling 什么关系？
 
-Function calling 是模型输出“调用哪个工具、参数是什么”的能力；MCP 更偏**标准化模型与外部工具/资源之间的连接协议**。
+Function calling 是模型输出“调用哪个工具、参数是什么”的能力；MCP 更偏**标准化模型/Agent 与外部工具、资源和数据之间的连接层**。
 
-面试可以说：
+面试可以先记：
 
-> Function Call 是模型侧决策机制；MCP 解决工具发现、schema、资源和连接的标准化问题。
+```text
+Function Calling = 模型侧动作决策
+MCP              = Agent ↔ Tool/Resource 连接协议
+A2A              = Agent ↔ Agent 协作协议
+```
+
+MCP/A2A 的 2026 版本和工程细节见 [09B](../09B_Agent_Fundamentals_Engineering/README.md)。
 
 ## Q6. Multimodal RAG 和 Text RAG 差在哪？
 
@@ -155,7 +165,7 @@ DOM：结构化、文字准确、元素 ID 清楚；Screenshot：能看到真实
 - semantic memory：长期知识/RAG；
 - environment state：外部世界当前状态。
 
-不要把“把所有历史都塞进 context”当成长记忆唯一方案。
+更完整的 memory write/compaction/external state 见 [09B](../09B_Agent_Fundamentals_Engineering/README.md)。
 
 ## Q15. Agent Planning 常见策略？
 
@@ -166,7 +176,7 @@ DOM：结构化、文字准确、元素 ID 清楚；Screenshot：能看到真实
 - tool-first routing；
 - learned policy。
 
-简单任务不一定需要复杂 planning，额外思考会增加延迟。
+简单任务不一定需要复杂 planning，额外思考会增加延迟。完整 planner/executor/verifier 设计见 [09B](../09B_Agent_Fundamentals_Engineering/README.md)。
 
 ## Q16. VLA 是什么？
 
@@ -203,3 +213,11 @@ Vision-Language-Action 模型把输出从文本扩展到动作：
 6. 设置最大步数和 rollback。
 
 Agent 的可靠性来自 **model + environment feedback + guardrails**。
+
+---
+
+## 下一步
+
+如果这一页能讲清，再进入 [09B Agent Fundamentals & Engineering](../09B_Agent_Fundamentals_Engineering/README.md)，重点补：
+
+**Tool Runtime → Planning → Memory → Multi-Agent → MCP/A2A → Coding Agent → Agent RL → Evaluation → Sandbox / Durable Execution。**
