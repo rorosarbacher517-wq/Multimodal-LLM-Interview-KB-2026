@@ -128,7 +128,76 @@ Text/image/document/video embedding + reranker 让 multimodal RAG 从“caption 
 
 Image/PDF/website/tool result 都可能携带 indirect prompt injection。可靠 Agent 需要：instruction/data separation、least privilege、confirmation、sandbox、action verification、audit log。
 
-## 当前最值得持续追踪的 10 条主线
+## 17. Agent Protocol：Function Calling → MCP → A2A
+
+2026 面试不能把三者混成一个概念：
+
+```text
+Function Calling
+= 模型生成结构化工具调用
+
+MCP
+= Agent / model 与 tool / resource / data 的标准连接层
+
+A2A
+= Agent 与 Agent 的发现、通信和协作层
+```
+
+Google 在 A2A 的公开说明中明确把 A2A 定位为 Agent interoperability，并说明它与 MCP 的工具/上下文连接能力是互补关系。
+
+A2A: https://developers.googleblog.com/en/a2a-a-new-era-of-agent-interoperability/
+2026 protocol guide: https://developers.googleblog.com/en/developers-guide-to-ai-agent-protocols/
+
+## 18. MCP 2026-07-28：从“会用 MCP”转向理解协议工程
+
+官方 2026-07-28 规范更新重点包括：
+- stateless protocol core；
+- Multi Round-Trip Requests；
+- header-based routing；
+- cacheable list results；
+- authorization hardening；
+- formal extensions / tasks。
+
+面试价值：MCP 已经不仅是“一个工具协议名”，而开始涉及**负载均衡、路由、缓存、授权和可扩展协议设计**。
+
+Primary: https://blog.modelcontextprotocol.io/posts/2026-07-28/
+
+## 19. Agent Runtime：Harness + Sandbox + Durable Execution
+
+2026 Agent 工程越来越强调把：
+
+```text
+Harness
+instructions / tools / approvals / tracing / state
+
+与
+
+Sandbox
+files / shell / code / isolated compute
+```
+
+分离。
+
+OpenAI 2026 Agents SDK 的公开更新强调 native sandbox、harness-compute separation，以及通过 snapshot/rehydration 支持 durable execution。无论使用哪个框架，这背后的工程思想都值得掌握：**credential isolation、checkpoint/resume、failure recovery、long-horizon execution**。
+
+Primary: https://openai.com/index/the-next-evolution-of-the-agents-sdk/
+
+## 20. Agent Evaluation：从短任务转向 Long-Horizon Executable Workflows
+
+OSWorld 2.0 把 computer-use 评测推进到更长、更真实的跨应用工作流，强调 dynamic environments、cross-source reasoning、implicit state、visual-spatial precision 和安全执行。
+
+面试中不要只讨论 next-action accuracy，要看：
+- end-to-end success；
+- partial completion；
+- steps / tool calls；
+- cost / latency；
+- recovery；
+- safety。
+
+OSWorld 2.0: https://arxiv.org/abs/2606.29537
+BrowserGym: https://arxiv.org/abs/2412.05467
+
+## 当前最值得持续追踪的 12 条主线
 1. Native multimodal foundation training；
 2. Dynamic/native resolution；
 3. Visual-token routing/compression；
@@ -136,11 +205,13 @@ Image/PDF/website/tool result 都可能携带 indirect prompt injection。可靠
 5. Multimodal reasoning + RL/verifier；
 6. Active perception / lookback；
 7. Long-video retrieval + tracking/memory；
-8. GUI/VLA/tool integration；
-9. Omni streaming/full-duplex；
-10. Disaggregated efficient serving + safety.
+8. Agent protocols：MCP / A2A / tool interfaces；
+9. Long-horizon Agent runtime：state / sandbox / checkpoint / resume；
+10. GUI/VLA/tool integration；
+11. Omni streaming/full-duplex；
+12. Disaggregated efficient serving + safety.
 
 ---
 
 ### 更新纪律
-对快速变化的模型：**先确认官方 release/model card，再更新本页；不能用第三方排行榜反推内部架构。**
+对快速变化的模型和 Agent 协议：**先确认官方 release/spec/model card，再更新本页；不能用第三方文章反推内部架构或协议行为。**
