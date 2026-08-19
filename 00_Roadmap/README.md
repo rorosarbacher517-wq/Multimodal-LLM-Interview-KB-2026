@@ -7,10 +7,15 @@
     ↓
 Transformer / LLM
     ↓
-CNN / ViT / CLIP / SigLIP / DINOv2
+Vision Fundamentals
     ↓
 Detection / Segmentation / Grounding
-YOLO / DETR / RT-DETR / SAM / GroundingDINO
+    ↓
+OCR / Document AI
+    ↓
+Pose / Tracking
+    ↓
+Depth / 3D Perception
     ↓
 Vision Encoder → Connector → LLM
     ↓
@@ -18,7 +23,7 @@ Vision Encoder → Connector → LLM
     ↓
 Multimodal Pretrain → SFT → Preference/RL
     ↓
-Reasoning / Grounding / OCR / Agent
+Reasoning / RAG / Agent / GUI / VLA
     ↓
 FSDP / TP / PP / EP → vLLM / SGLang
     ↓
@@ -31,17 +36,53 @@ Evaluation / System Design / Project Interview
 - `Q/K/V` 的 shape 怎么变化？
 - RoPE、GQA、KV Cache、MoE 各解决什么问题？
 - 图像怎么从 `[3,H,W]` 变成视觉 token？
-- YOLO 为什么要 P3/P4/P5 多尺度检测？
-- NMS、one-to-many、one-to-one matching 有什么关系？
-- SAM 为什么可以用 point / box / mask 做 prompt？
-- GroundingDINO 为什么能把自然语言短语映射到 box？
-- Vision Encoder 和 LLM hidden size 不一样怎么办？
+- CNN / ViT / CLIP / DINO 分别解决什么？
 
-如果这些说不清，多模态模型结构题很容易变成背模型名。
+## 第二层：视觉感知底座必须完整
 
-## 第二层：必须能画出两类视觉链路
+### Detection / Segmentation / Grounding
 
-### A. MLLM
+要会解释：
+
+- YOLO 的 P3/P4/P5 为什么是多尺度；
+- DETR 为什么用 Hungarian matching；
+- SAM 为什么需要 prompt encoder；
+- GroundingDINO 如何把 text phrase 对齐到 box。
+
+### OCR / Document AI
+
+要会解释：
+
+- text detection 和 recognition 为什么分开；
+- CTC 为什么不需要字符级对齐；
+- layout / reading order 为什么属于文档结构而不是 OCR；
+- PaddleOCR-VL / MinerU 为什么采用 layout + crop + recognition 的 coarse-to-fine pipeline；
+- Document RAG 为什么必须保留 page/bbox/layout metadata。
+
+### Pose / Tracking
+
+要会解释：
+
+- top-down / bottom-up pose；
+- heatmap / SimCC；
+- ByteTrack 为什么使用低分 detection；
+- Kalman / Hungarian / ReID 分别负责什么；
+- object tracking、point tracking、optical flow 的区别；
+- CoTracker / SAM2 tracking 适合什么场景。
+
+### Depth / 3D Perception
+
+要会解释：
+
+- relative vs metric depth；
+- `Z=fB/d`；
+- intrinsics / extrinsics / unprojection；
+- point / voxel / pillar / BEV；
+- PointPillars / CenterPoint / BEVFormer / BEVFusion；
+- DUSt3R / MASt3R / VGGT 为什么改变传统 SfM pipeline；
+- 3D geometry 为什么对 VLA / world model 重要。
+
+## 第三层：必须能画出一个 MLLM
 
 ```text
 Image / Video
@@ -60,40 +101,30 @@ LLM
 Text / Coordinates / Tool Call / Action
 ```
 
-### B. Grounded Perception
-
-```text
-Image → detector / grounding model → boxes
-Text ────────────────────────────────↑
-                         ↓
-                      SAM / SAM2
-                         ↓
-                     pixel masks
-```
-
 你必须能够解释：
 
 - `N` 从哪里来；
 - 为什么 `N'` 可能比 `N` 小；
-- 为什么 detector 更喜欢保留多尺度 feature map；
-- 640 输入为什么常得到 80×80 / 40×40 / 20×20；
-- object queries 如何与 GT 匹配；
-- prompt / box / mask 如何在 SAM 中交互；
-- 最终 loss 到底监督谁。
+- 为什么 `Dv` 要变成 `Dl`；
+- image/video 的位置编码怎么做；
+- 最终 loss 到底监督谁；
+- 什么时候应该调用 YOLO/SAM/OCR/depth/tracker，而不是只靠 VLM 内部感知。
 
-## 第三层：2026 必须掌握的变化
+## 第四层：2026 必须掌握的变化
 
-- Dynamic / native resolution 与 visual-token compression。
-- Qwen3-VL 的 DeepStack、Interleaved-MRoPE、timestamp alignment。
-- InternVL3.5 ViR 与 vision-language decoupled serving。
-- YOLO26 的 end-to-end NMS-free、DFL-free 路线。
-- YOLOE-26 / GroundingDINO / DINO-X 的 open-vocabulary perception。
-- SAM 2 的 streaming memory 与视频对象传播。
-- Grounded SAM 2 的 text → box → mask → tracking 工具链。
-- RL 如何提升视觉 reasoning，而不是只让回答变长。
-- GUI Agent 如何从 screenshot 走到 grounding / click / action。
+- native / dynamic resolution；
+- visual-token compression / routing；
+- Qwen3-VL 的 DeepStack、Interleaved-MRoPE、timestamp alignment；
+- InternVL3.5 的 ViR / DvD；
+- multimodal reasoning + RLVR；
+- long-video active navigation；
+- GUI / computer-use agent；
+- full-duplex Omni；
+- PaddleOCR-VL-1.6 / MinerU2.5-Pro 的 Document AI；
+- VGGT-Ω 的 dynamic-scene 3D foundation modeling；
+- point-cloud foundation encoder 与 2D–3D joint pretraining。
 
-## 第四层：算法工程必须能落地
+## 第五层：算法工程必须能落地
 
 至少会算：
 
@@ -101,43 +132,50 @@ Text ─────────────────────────
 - Adam 优化器显存；
 - KV cache；
 - visual token 数；
+- YOLO feature-map 尺寸；
+- point-cloud / voxel / BEV tensor 大小；
 - attention 复杂度；
 - LoRA 参数量；
-- detector feature-map 尺寸；
-- IoU / NMS；
 - FSDP/TP/PP/EP 各切什么。
 
 至少会解释：
 
 - OOM 从哪里排查；
-- 高分辨率输入如何影响 token/feature map；
-- 自动标注如何用 GroundingDINO + SAM 产生伪标签；
-- 为什么线上可用轻量 YOLO student，而 teacher 用更强 open-world model；
-- vLLM / SGLang 如何管理多模态请求。
+- 多模态 batch 为什么难做；
+- 长视频为什么容易把 prefill 打爆；
+- tracker 的错误来自 detector 还是 association；
+- document parser 的错误来自 OCR、layout 还是 reading order；
+- 3D perception 的 coordinate frame 如何统一；
+- 为什么线上不能只追求 benchmark accuracy。
 
 ## 最推荐的复习顺序
 
-### Week 1：底层视觉 + Transformer
-01 Transformer → 02 Vision → **02B Detection/Segmentation/Grounding** → 03 Multimodal architecture
+### Week 1：底层 + 视觉感知
 
-### Week 2：模型与训练
-04 Representative models → 05 Data → 06 Pretrain/SFT → 07 RL
+01 Transformer → 02 Vision → 02B Detection → 02C OCR → 02D Pose/Tracking → 02E Depth/3D
+
+### Week 2：多模态模型与训练
+
+03 Multimodal architecture → 04 Representative models → 05 Data → 06 Pretrain/SFT → 07 RL
 
 ### Week 3：能力与工程
+
 08 Video/Omni → 09 Agent → 10 Distributed → 11 Serving
 
 ### Week 4：面试化
+
 12 Evaluation → 13 Handwriting → 14 System Design → 15 Project → 16 高频题
 
 ## 一个判断标准
 
-对任何一个新视觉/多模态模型，不需要背全部参数。优先回答：
+对任何一个新视觉/多模态模型，不需要背全部参数。至少能回答：
 
 1. 输入是什么？
-2. Backbone / Vision Encoder 是什么？
-3. 空间分辨率和 token/feature-map 如何变化？
-4. Head / Connector / Query / Prompt 是什么？
-5. 训练时如何 assignment / matching / loss？
-6. 是否 closed-set / open-vocabulary / promptable？
-7. 推理是否需要 NMS、memory、tool call？
-8. 成本主要在哪里？
+2. Backbone / encoder 是什么？
+3. feature/token 的 shape 怎么变？
+4. 中间是否保留多尺度/空间坐标？
+5. 输出是什么：box/mask/keypoint/depth/text/action？
+6. loss / matching 怎么做？
+7. 是否需要后处理 / memory / geometry？
+8. 推理成本主要在哪里？
+9. 它与 MLLM/Agent/VLA 在系统中如何连接？
