@@ -38,12 +38,13 @@
 | [13 Code Handwriting](./13_Code_Handwriting/README.md) | Attention、RoPE、LoRA、Projector、loss、KV 估算 | 15 |
 | [14 System Design](./14_System_Design/README.md) | 多模态搜索、文档 QA、视频 QA、GUI Agent 等 | 15 |
 | [15 Project Interview](./15_Project_Interview/README.md) | 项目介绍、消融、数据闭环、故障排查 | 12 |
-| [16 高频题索引](./16_High_Frequency_Interview/README.md) | 面试前快速抽题 | 100+ |
+| [16 高频题索引](./16_High_Frequency_Interview/README.md) | 通用大模型 / MLLM 高频题 | 100+ |
+| [16B Visual Perception 高频题](./16B_Visual_Perception_High_Frequency/README.md) | OCR、Pose、Tracking、Depth、3D 闭卷复习 | 45 |
 | [17 2026-08 技术快照](./17_2026_Snapshot/README.md) | 最新模型与技术趋势 | — |
 | [18 Primary References](./18_References/README.md) | 原论文 / 官方 GitHub / 官方文档 | — |
 | [19 30-Day Review Plan](./19_30_Day_Review_Plan/README.md) | 30 天冲刺复习计划 | — |
 
-当前核心模块约 **327 道问答**，另有高频题索引用于闭卷复习。
+当前核心模块约 **327 道问答**，另有通用高频索引和 **45 道视觉感知专项高频题**。
 
 ## 视觉感知层为什么单独补全
 
@@ -96,7 +97,7 @@ MLLM / Agent / VLA
 - **第二遍**：04 → 05 → 06 → 07，掌握 2026 多模态主线。
 - **第三遍**：08 → 09 → 10 → 11，补 Agent 与工程。
 - **第四遍**：13 手写 + 14 系统设计 + 15 项目面试。
-- **面试前**：16 高频题 + 17 技术快照。
+- **面试前**：16 通用高频题 + 16B 视觉感知高频题 + 17 技术快照。
 
 ## Status
 
