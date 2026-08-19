@@ -1,154 +1,146 @@
-# 17 · 2026-08 Multimodal AI Snapshot
+# 17 · 2026-08-19 Multimodal AI Snapshot
 
-> 截止 2026-08，只记录有官方仓库/论文支撑、且对算法面试真正有价值的变化。
+> 这里只放**变化快、但已有论文/官方仓库支持**、且对算法面试有方法价值的内容。稳定基础放前面的模块，不在这里重复。
 
-## 1. 从“外挂视觉塔”走向 Native Multimodal Foundation
+## 1. Qwen3.5 → Qwen3.6 → Qwen3.8：当前 Qwen open-model lineage
 
-Qwen3.5 官方强调 Unified Vision-Language Foundation 和更统一的多模态训练。多模态正在从“在文本 LLM 外加 vision adapter”走向 foundation-model 级统一训练。
+Qwen 官方当前仓库为 `QwenLM/Qwen3.8`。官方说明：
+- Qwen3.5：Unified Vision-Language Foundation、Gated Delta Networks + sparse MoE、scalable RL；
+- Qwen3.6：在其基础上强调 agentic coding、thinking preservation 与稳定性；
+- Qwen3.8：built on Qwen3.5 architectural foundation，重点提升 coding、professional work、research、long-horizon agents。
 
-- Official: https://github.com/QwenLM/Qwen3.6
+2026-08-12/14 分别公开 Qwen3.8-2.4T-A95B 与 Qwen3.8-27B。
 
-## 2. Qwen3-VL：高分辨率 + 多层视觉特征 + 时间对齐
+**注意：** 不因为版本号更新就自行推断新的 vision encoder/projector。具体 checkpoint 的模态和内部实现按 model card。
 
-公开技术报告的重要升级包括 Interleaved-MRoPE、DeepStack 和 text-based timestamp alignment。
+Primary: https://github.com/QwenLM/Qwen3.8
 
-- Paper: https://arxiv.org/abs/2511.21631
-- Repo: https://github.com/QwenLM/Qwen3-VL
+## 2. Qwen3-VL：高分辨率、多层视觉特征、时间对齐
 
-## 3. Qwen3-Omni：从 VLM 走向实时 Omni
+公开技术报告的关键点：
+- Interleaved-MRoPE；
+- DeepStack；
+- text-based timestamp alignment；
+- dense/MoE、长 interleaved multimodal context。
 
-Qwen3-Omni 公开采用 MoE-based Thinker–Talker，处理 text/image/audio/video，并支持实时 text/speech 输出。
+Primary: https://arxiv.org/abs/2511.21631
 
-- Official: https://github.com/QwenLM/Qwen3-Omni
+## 3. InternVL3.5：模型设计直接连 Serving
 
-## 4. InternVL3.5：模型设计开始直接面向 Serving
+Cascade RL + Visual Resolution Router + Decoupled Vision-Language Deployment。
 
-InternVL3.5 同时提出 Cascade RL、Visual Resolution Router 和 Decoupled Vision-Language Deployment。
+它说明“视觉分辨率”已经同时是**能力问题、token-budget 问题和服务负载问题**。
 
-- Paper: https://arxiv.org/abs/2508.18265
+Primary: https://arxiv.org/abs/2508.18265
 
-## 5. GLM-V：Native Multimodal Agent
+## 4. InternVL-U：理解与生成开始统一
 
-GLM-V 路线把视觉感知更直接地放入 reasoning、planning、tool use、execution。
+公开 InternVL-U 路线把 multimodal understanding/reasoning 与 image generation/editing 放入同一约 4B 系统，并结合 MLLM 与 MMDiT-style generation head。
 
-- Repo: https://github.com/zai-org/GLM-V
-- GLM-5V-Turbo: https://arxiv.org/abs/2604.26752
+**面试趋势：** MLLM 不能只准备 VQA/grounding；Diffusion/DiT/Flow/Unified Generation 也进入知识栈。
 
-## 6. MiniCPM-V：Visual Token Compression 进入端侧核心
+Primary: https://arxiv.org/abs/2603.09877
 
-轻量 VLM 的优化已经不只是 LLM quantization，也包括视觉 token 数、vision compute 和端侧 pipeline。
+## 5. Qwen3-Omni / Full-duplex：从 VLM 走向实时 Omni
 
-- Official: https://github.com/OpenBMB/MiniCPM-V
+Omni 模型需要 text/image/audio/video 的时间同步、streaming state、speech codec、turn-taking 与 interruption。
 
-## 7. Omni：Full-Duplex Real-time Interaction
+Qwen3-Omni: https://github.com/QwenLM/Qwen3-Omni
 
-实时系统需要同时处理 streaming input/output、用户打断、turn-taking 和多模态同步。
+## 6. GLM-V：Native Multimodal Agent
 
-## 8. Seed / Kimi 等模型强调 Data + Model + Agent 一体化
+公开路线强调视觉感知直接参与 reasoning、planning、tool use 与 execution。
 
-2025–2026 的公开模型越来越把 grounding、video、GUI、agent data 放入同一能力链，而不是把视觉只当静态 VQA。
+Primary: https://github.com/zai-org/GLM-V
 
-## 9. Multimodal Retrieval 成为独立基础能力
+## 7. Seed1.5-VL：Data / Model / Agent 一体化
 
-Embedding / Reranker 开始统一 text、image、document image、video，用于 multimodal RAG。
+公开报告给出 532M vision encoder + 20B-active MoE LLM，并覆盖 OCR、grounding、3D、video、GUI/game agent。
 
-## 10. Test-time Scaling 与 Active Perception
+对数据策略岗位尤其有价值，因为报告同时讨论 data construction 与 training。
 
-能力扩展不再只靠参数，也在扩展 inference-time compute、visual lookback、crop/zoom/retrieval 和 verifier。
+Primary: https://arxiv.org/abs/2505.07062
 
-## 11. FlashAttention-4：模型和硬件共同设计
+## 8. MiniCPM-V 4.6：视觉 Token Compression 是端侧核心
 
-2026 FlashAttention-4 针对 Blackwell GPU 进一步重构 attention pipeline 和数据搬运。
+官方路线公开 mixed `4×/16×` visual-token compression 与轻量视觉/语言 backbone。
 
-- Paper: https://arxiv.org/abs/2603.05451
+趋势：VLM edge optimization 不只是 LLM INT4，也包括**视觉 token 数、vision compute、KV/prefill**。
 
-## 12. YOLO26：实时检测也走向 End-to-End
+Primary: https://github.com/OpenBMB/MiniCPM-V
 
-Ultralytics 2026 的 YOLO26 默认采用 NMS-free end-to-end inference，并移除传统 DFL regression 路线。
+## 9. YOLO26 / Open-Vocabulary Real-time Perception
 
-- Docs: https://docs.ultralytics.com/models/yolo26
+Ultralytics YOLO26 公开路线强调 end-to-end NMS-free、DFL-free；YOLOE 等又把 open-vocabulary/promptable detection/segmentation 带入实时模型。
 
-## 13. Open-Vocabulary Real-Time Detection：YOLOE / GroundingDINO / DINO-X
+Primary: https://docs.ultralytics.com/models/yolo26/
 
-开放词汇感知正在从大型 Transformer detector 扩展到更实时、可部署的检测与分割模型。
+## 10. SAM2 + GroundingDINO：Perception Toolchain 模块化
 
-- YOLOE: https://arxiv.org/abs/2503.07465
-- GroundingDINO: https://arxiv.org/abs/2303.05499
-- DINO-X: https://arxiv.org/abs/2411.14347
+```text
+text → GroundingDINO box → SAM2 mask → video propagation/tracking
+```
 
-## 14. SAM 2 + GroundingDINO：视觉工具开始模块化组合
+这条链对 auto-labeling、GUI、robot perception、video annotation 都有直接意义。
 
-SAM 2 使用 streaming memory 做 image/video promptable segmentation；GroundingDINO 提供 text-to-box grounding。Grounded SAM 2 把两者组合成 text → box → mask → tracking pipeline。
+SAM2: https://github.com/facebookresearch/sam2
+GroundingDINO: https://github.com/IDEA-Research/GroundingDINO
 
-- SAM 2: https://github.com/facebookresearch/sam2
-- GroundingDINO: https://github.com/IDEA-Research/GroundingDINO
-- Grounded SAM 2: https://github.com/IDEA-Research/Grounded-SAM-2
+## 11. Document AI：OCR → Structure Recovery → LLM-ready Parsing
 
-## 15. PaddleOCR-VL-1.6：Document AI 已进入小型专用 VLM 阶段
+现代文档系统不再只做字符识别，而是 layout、reading order、table/formula、multi-page structure、Markdown/JSON output 与 RAG 一体化。
 
-2026 年 PaddleOCR-VL-1.6 延续 `layout analysis → element crop → VLM recognition → reading-order merge` 的专用文档解析路线。重点不只是 OCR，而是 text、formula、table、chart、seal 和复杂页面结构恢复。
+PaddleOCR: https://github.com/PaddlePaddle/PaddleOCR
+MinerU: https://github.com/opendatalab/MinerU
 
-- Official: https://github.com/PaddlePaddle/PaddleOCR
-- Docs: https://github.com/PaddlePaddle/PaddleOCR/blob/main/docs/version3.x/pipeline_usage/PaddleOCR-VL.en.md
+## 12. 3D Foundation：SfM Pipeline 正在被 Learned Geometry 重构
 
-**面试关键词：** layout-first、native-resolution crop、document structure、specialized VLM。
+DUSt3R / MASt3R / VGGT 等把 correspondence、point-map、camera/depth prediction 更深地整合进 feed-forward learned system；同时 SLAM、NeRF、3DGS 仍是理解 3D world representation 的关键基础。
 
-## 16. MinerU2.5-Pro：Document AI 的瓶颈越来越像 Data Engineering 问题
+VGGT: https://github.com/facebookresearch/vggt
 
-MinerU2.5 已采用 coarse-to-fine 高分辨率解析；2026 的 MinerU2.5-Pro 在保持 1.2B 级架构基本不变的情况下，重点扩大数据覆盖、难例采样、跨模型一致性校验和 judge-and-refine 标注，并加入 progressive training / GRPO alignment。
+## 13. Multimodal Retrieval 成为独立基础能力
 
-- MinerU2.5: https://arxiv.org/abs/2509.22186
-- MinerU2.5-Pro: https://arxiv.org/abs/2604.04771
-- Repo: https://github.com/opendatalab/MinerU
+Text/image/document/video embedding + reranker 让 multimodal RAG 从“caption 图片后做 text search”升级为真正的跨模态 retrieval。
 
-**面试关键词：** data engine、hard-sample mining、annotation verification、coarse-to-fine parsing。
+面试必须同时懂 BM25、dense embedding、ANN/HNSW/IVF-PQ、reranking 和 retrieval evaluation。
 
-## 17. Tracking：从 Box Identity 扩展到 Track Any Point
+## 14. RL / Agent 正在把 Verifier 与 Rollout Infrastructure 变成核心
 
-传统 MOT 仍以 ByteTrack / BoT-SORT / OC-SORT 等 tracking-by-detection 为核心；CoTracker3 则代表 transformer-based point tracking，可联合跟踪任意 query points，并通过 pseudo-labelled real videos 缩小 synthetic-to-real gap。
+后训练已不只是“知道 DPO/GRPO 名字”。要理解：
+- rollout generation；
+- verifier/reward；
+- advantage/KL；
+- asynchronous inference-training；
+- environment-level success。
 
-- ByteTrack: https://github.com/FoundationVision/ByteTrack
-- OC-SORT: https://github.com/noahcao/OC_SORT
-- CoTracker3: https://github.com/facebookresearch/co-tracker
+## 15. Serving 从单体模型走向 Disaggregation
 
-**面试关键词：** association、ID switch、point tracks、visibility、pseudo-label video。
+重要关键词：
+- chunked prefill；
+- prefill/decode disaggregation；
+- vision encoder 与 LLM 拆池；
+- multi-LoRA；
+- multimodal feature cache；
+- admission control。
 
-## 18. VGGT → VGGT-Ω：3D Geometry Foundation 正在快速扩展
+## 16. Safety 的攻击面也变成 Multimodal
 
-VGGT 把 camera pose、intrinsics、depth、point maps、3D tracks 放到一个 feed-forward geometry model 里。2026 的 VGGT-Ω 进一步支持动态场景，并通过 registers / register attention 和更简化的 dense prediction head 降低训练内存、扩大数据规模。
+Image/PDF/website/tool result 都可能携带 indirect prompt injection。可靠 Agent 需要：instruction/data separation、least privilege、confirmation、sandbox、action verification、audit log。
 
-- VGGT: https://github.com/facebookresearch/vggt
-- VGGT-Ω: https://arxiv.org/abs/2605.15195
-
-**面试关键词：** feed-forward reconstruction、point map、camera pose、register attention、dynamic scenes、VLA spatial representation。
-
-## 19. Point Cloud Foundation：2D–3D Joint Pretraining 变得更重要
-
-Pointcept 在 2025–2026 持续推进 Sonata、Concerto、Utonia 等通用点云 encoder。趋势是从单任务 3D segmentation/detection 转向 reusable 3D representation，并加强 image–point-cloud joint learning。
-
-- Official: https://github.com/Pointcept/Pointcept
-
-## 20. 当前最重要的 14 条技术主线
-
-1. Native multimodal pretraining；
+## 当前最值得持续追踪的 10 条主线
+1. Native multimodal foundation training；
 2. Dynamic/native resolution；
 3. Visual-token routing/compression；
-4. Multimodal reasoning + RLVR；
-5. Active perception / visual lookback；
-6. Long-video retrieval + temporal grounding；
-7. GUI/tool/agent integration；
-8. Omni streaming + efficient serving；
-9. Open-vocabulary detection / grounding；
-10. Promptable segmentation + model-in-the-loop data engine；
-11. Document parsing VLM + structured RAG；
-12. Point/object tracking + video memory；
-13. Feed-forward 3D geometry foundation models；
-14. 2D–3D joint representation learning for VLA/world models。
+4. Understanding + generation unification；
+5. Multimodal reasoning + RL/verifier；
+6. Active perception / lookback；
+7. Long-video retrieval + tracking/memory；
+8. GUI/VLA/tool integration；
+9. Omni streaming/full-duplex；
+10. Disaggregated efficient serving + safety.
 
-## 21. 哪些内容不要编？
+---
 
-对闭源模型或未充分披露版本：vision encoder、hidden size、projector、MoE routing、pretraining data composition、loss，如果官方未披露，就明确 unknown / not publicly disclosed。
-
-对视觉感知模型也一样：具体 layer、参数量、训练数据、损失配比优先回官方代码/论文核对；不要把社区实现细节写成原模型事实。
-
-**截至 2026，可信地说清楚公开事实，比背一份看似完整但混有猜测的架构表更重要。**
+### 更新纪律
+对快速变化的模型：**先确认官方 release/model card，再更新本页；不能用第三方排行榜反推内部架构。**

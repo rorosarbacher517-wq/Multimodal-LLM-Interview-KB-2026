@@ -1,63 +1,55 @@
-# 02E · Depth / 3D Perception
+# 02E · Depth / 3D Perception / Geometry
 
-> 这一模块补齐从二维图像到三维世界建模的基础：**depth → camera geometry → point cloud → 3D detection / BEV → multi-view reconstruction → 3D foundation models → VLA**。
-
-## 推荐学习顺序
-
-**Depth basics → camera geometry → stereo/SfM → point cloud → 3D detection/BEV → DUSt3R/MASt3R → VGGT/VGGT-Ω → MLLM/VLA**
+> 从二维图像进入三维世界：**Depth → Camera Geometry → SfM/SLAM → Point Cloud/BEV → NeRF/3DGS → Feed-forward 3D Foundation → VLA/World Model**。
 
 ## 问题目录
-
-1. [Relative Depth、Metric Depth、Disparity 区别](./01_depth_types.md)
-2. [单目深度为什么是病态问题](./02_monocular_depth_ambiguity.md)
-3. [DPT / MiDaS：Transformer Depth 基础](./03_dpt_midas.md)
-4. [Depth Anything V2：Foundation Depth](./04_depth_anything_v2.md)
-5. [Video Depth Anything / Prompt Depth Anything](./05_video_prompt_depth_anything.md)
+1. [Relative Depth / Metric Depth / Disparity](./01_depth_types.md)
+2. [Monocular Depth Ambiguity](./02_monocular_depth_ambiguity.md)
+3. [DPT / MiDaS](./03_dpt_midas.md)
+4. [Depth Anything V2](./04_depth_anything_v2.md)
+5. [Video / Prompt Depth Anything](./05_video_prompt_depth_anything.md)
 6. [Camera Intrinsics / Extrinsics / Projection](./06_camera_geometry.md)
-7. [Stereo：Disparity 如何变成 Depth](./07_stereo_depth.md)
-8. [SfM / Bundle Adjustment 在做什么](./08_sfm_bundle_adjustment.md)
-9. [Point Cloud：Point / Voxel / Pillar / Range View](./09_point_cloud_representations.md)
-10. [PointNet / PointNet++ 为什么重要](./10_pointnet.md)
+7. [Stereo: Disparity → Depth](./07_stereo_depth.md)
+8. [SfM / Bundle Adjustment](./08_sfm_bundle_adjustment.md)
+9. [Point / Voxel / Pillar / Range View](./09_point_cloud_representations.md)
+10. [PointNet / PointNet++](./10_pointnet.md)
 11. [Sparse Conv / Point Transformer v3](./11_sparseconv_ptv3.md)
-12. [2025–2026 Point Cloud Foundation：Sonata / Concerto / Utonia](./12_pointcloud_foundation_2026.md)
-13. [3D Detection：PointPillars / SECOND / CenterPoint](./13_3d_detection.md)
-14. [BEVFormer / BEVFusion：为什么转到 Bird's-Eye View](./14_bev_perception.md)
-15. [3D Occupancy 为什么比 Box 更完整](./15_occupancy.md)
-16. [DUSt3R：为什么可以弱化传统 SfM Pipeline](./16_dust3r.md)
-17. [MASt3R：3D Matching 与 Scalable Alignment](./17_mast3r.md)
-18. [VGGT：Feed-forward 3D Geometry Foundation](./18_vggt.md)
-19. [VGGT-Ω：2026 的动态场景与高效 3D Foundation](./19_vggt_omega.md)
-20. [3D Perception 如何接 MLLM / VLA / World Model](./20_3d_to_mllm_vla.md)
+12. [Point-cloud Foundation Models](./12_pointcloud_foundation_2026.md)
+13. [PointPillars / SECOND / CenterPoint](./13_3d_detection.md)
+14. [BEVFormer / BEVFusion](./14_bev_perception.md)
+15. [3D Occupancy](./15_occupancy.md)
+16. [DUSt3R](./16_dust3r.md)
+17. [MASt3R](./17_mast3r.md)
+18. [VGGT](./18_vggt.md)
+19. [VGGT-Ω](./19_vggt_omega.md)
+20. [3D → MLLM / VLA / World Model](./20_3d_to_mllm_vla.md)
+21. [SLAM / VIO](./21_slam_vio.md)
+22. [NeRF](./22_nerf.md)
+23. [3D Gaussian Splatting](./23_3d_gaussian_splatting.md)
+24. [Camera/LiDAR/IMU Calibration & Fusion](./24_sensor_calibration_fusion.md)
 
-## 一张图理解 3D Perception
-
+## 一张图
 ```text
-Image / Multi-view / Video / LiDAR
+Image / Multi-view / Video / LiDAR / IMU
             ↓
-2D features / depth / correspondences
+depth / features / correspondences / motion
             ↓
-Camera geometry / unprojection
+Camera Geometry / Calibration / SfM / SLAM
             ↓
-Point cloud / point map / BEV / occupancy
+Point Cloud / BEV / Occupancy / Scene Representation
             ↓
-3D objects + camera pose + scene geometry
+Detection / Reconstruction / Rendering / Tracking
             ↓
-Spatial reasoning / planning / action
+Spatial Reasoning / Planning / Action
 ```
 
-## 2026 特别值得掌握
-
-- Depth Anything V2 + Video/Prompt Depth Anything；
-- DUSt3R / MASt3R 把 matching + reconstruction 变成 learned point-map prediction；
-- VGGT 直接预测 camera、depth、point maps、3D tracks；
-- VGGT-Ω 进一步扩展动态场景并降低训练内存；
-- Pointcept 2025–2026 的 Sonata / Concerto / Utonia 体现点云 foundation encoder 路线。
-
 ## Primary sources
-
 - Depth Anything V2: https://github.com/DepthAnything/Depth-Anything-V2
-- DUSt3R: https://github.com/naver/dust3r
-- MASt3R: https://github.com/naver/mast3r
-- VGGT: https://github.com/facebookresearch/vggt
-- VGGT-Ω: https://arxiv.org/abs/2605.15195
-- Pointcept: https://github.com/Pointcept/Pointcept
+- PointNet: https://arxiv.org/abs/1612.00593
+- BEVFormer: https://arxiv.org/abs/2203.17270
+- BEVFusion: https://arxiv.org/abs/2205.13542
+- NeRF: https://arxiv.org/abs/2003.08934
+- 3D Gaussian Splatting: https://arxiv.org/abs/2308.04079
+- DUSt3R: https://arxiv.org/abs/2312.14132
+- MASt3R: https://arxiv.org/abs/2406.09756
+- VGGT: https://arxiv.org/abs/2503.11651

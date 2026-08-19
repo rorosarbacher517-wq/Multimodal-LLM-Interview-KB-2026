@@ -1,228 +1,149 @@
 # 19 · 30-Day Interview Review Plan
 
-> 默认每天 2–4 小时。基础层现在按 **Math → Deep Learning → Transformer → Vision/Perception → MLLM** 展开。
->
-> 数学不追求重新学完大学课程，只要求把后面模型真正依赖的公式和直觉打通。
+> 默认每天 3–6 小时。仓库已经足够大，不应该一天“看几十页”；每天必须包含：**理解 → 闭卷口述 → shape/公式 → 代码/源码 → 复盘**。
 
-## Week 1：Math + Deep Learning + Transformer + 视觉底座
+## Week 1 · Math / ML / DL / Transformer / PyTorch
 
-### Day 1 · Linear Algebra for AI
-- scalar / vector / matrix / tensor
-- dot product / cosine similarity
-- L1 / L2 norm
-- matrix multiplication / transpose
-- rank / low-rank
-- projection / orthogonality / subspace
-- eigenvalue / eigenvector
-- SVD / PCA
-- 重点映射：`dot product → Attention`、`low rank → LoRA`
-- 手算 cosine similarity 和一个 matrix multiplication shape
+### Day 1 — Linear Algebra + Information Theory
+- vector/matrix/dot/cosine/norm
+- rank/SVD/PCA
+- entropy/CE/KL
+- softmax stability
+- 闭卷 10 题
 
-### Day 2 · Calculus / Probability / Information Theory
-- derivative / partial derivative / gradient
-- chain rule / Jacobian / Hessian 直觉
-- expectation / variance / covariance
-- conditional probability / Bayes
-- Bernoulli / categorical / Gaussian
-- MLE / MAP
-- entropy / cross entropy / KL
-- log / exp / log-sum-exp / softmax stability
-- 重点推导：`softmax + CE → p-y`
+### Day 2 — Calculus + Probability + Optimization
+- gradient/chain rule/Jacobian/Hessian
+- expectation/variance/Bayes/MLE
+- SGD/Adam/AdamW
+- warmup/cosine
 
-### Day 3 · Deep Learning Training Loop
-- Tensor shape / broadcasting
-- Forward / computational graph / backward
-- MSE / MAE / CE / BCE / KL
-- ReLU / GELU / SiLU
-- SGD / Momentum / Adam / AdamW
-- warmup / cosine / weight decay
-- LayerNorm / RMSNorm / BatchNorm
-- residual connection
-- gradient accumulation / clipping
-- FP16 / BF16 / mixed precision
-- activation checkpointing
-- 粗算 parameter / gradient / optimizer / activation memory
+### Day 3 — Classical ML
+- Linear/Logistic/SVM
+- Tree/RF/GBDT/XGBoost
+- bias/variance/data leakage
+- precision/recall/AUC/calibration
+- 做一个 sklearn/XGBoost baseline
 
-### Day 4 · Tokenizer → Transformer → LLM Inference
-- BPE / SentencePiece
-- vocabulary / BOS / EOS / PAD
-- embedding `[B,L] → [B,L,D]`
-- hidden state / logits / probability
-- Q/K/V / scaled dot-product attention
-- Multi-Head reshape
-- causal mask / padding mask
-- Pre-Norm / RMSNorm / residual
-- FFN / SwiGLU
-- RoPE / GQA / KV Cache
-- teacher forcing / next-token loss
-- prefill / decode
-- top-k / top-p / temperature
-- MoE / router / active params
-- 手写 attention + 手算 KV cache
+### Day 4 — Deep Learning + PyTorch
+- autograd / computation graph
+- norm/residual/activation
+- FP16/BF16
+- DataLoader/collate/contiguous
+- CUDA memory hierarchy / OOM
 
-### Day 5 · Vision + Detection / Segmentation / Grounding
-- CNN vs ViT
-- patchify / visual token
-- CLIP / SigLIP / DINO
-- YOLO / DETR / RT-DETR
-- SAM / SAM2
-- GroundingDINO
-- 手算 P3/P4/P5 和 ViT token 数
-- 回看 cosine similarity 为什么直接进入 CLIP / retrieval
+### Day 5 — Transformer I
+- tokenizer/embedding
+- Q/K/V / multi-head / mask
+- Pre-Norm/RMSNorm/SwiGLU
+- 手写 Attention
 
-### Day 6 · OCR / Document + Pose / Tracking
-- OCR detection / recognition / CTC
-- Layout / reading order
-- PaddleOCR-VL / MinerU
-- ViTPose / RTMPose
-- ByteTrack / OC-SORT / CoTracker
-- Document RAG
-- 复习 probability / matching / distance 在 tracking 中如何使用
+### Day 6 — Transformer II
+- RoPE
+- MHA/MQA/GQA
+- KV cache
+- prefill/decode
+- MoE
+- 手算 KV memory
 
-### Day 7 · Depth / 3D + 全基础闭卷
-- relative / metric depth
-- Depth Anything
-- camera intrinsics / extrinsics
-- rotation / translation / homogeneous transform
-- point / voxel / pillar / BEV
-- DUSt3R / MASt3R / VGGT
-- 闭卷画：`Math → Deep Learning training loop → Transformer → Perception → MLLM`
-- 抽 40 道 16A/16B 高频题
+### Day 7 — 基础闭卷日
+- 16A 抽题
+- 手写 RMSNorm/SwiGLU/Attention/top-p
+- 从零画 `text → tokenizer → model → logits → sampling`
 
-## Week 2：MLLM 模型 + 数据 + 训练
+## Week 2 · Complete Perception Stack
 
-### Day 8
-- Vision Encoder → Projector → LLM
-- LLaVA / Flamingo / BLIP-2
-- MLP / Q-Former / Resampler
+### Day 8 — Vision Backbone
+ResNet / ViT / Swin / ConvNeXt / MAE / CLIP / DINO / SigLIP；手算 patch/token。
 
-### Day 9
-- Qwen2.5-VL → Qwen3-VL
-- MRoPE / DeepStack / timestamp
+### Day 9 — Detection / Segmentation
+YOLO / DETR / FPN / assignment / NMS；semantic-instance-panoptic；U-Net / Mask R-CNN / Mask2Former / SAM。
 
-### Day 10
-- Qwen3.5 / InternVL3.5
-- native multimodal / ViR / DvD
+### Day 10 — Grounding / Document
+GroundingDINO / Grounded SAM；OCR detection/recognition/CTC；layout/reading order；Document RAG。
 
-### Day 11
-- GLM-V / Seed1.5-VL / Kimi-VL
+### Day 11 — Pose / Tracking / Motion
+ViTPose / ByteTrack / OC-SORT / SOT / RAFT / CoTracker；区分 detection error 与 association error。
 
-### Day 12
-- MiniCPM-V/O / Qwen3-Omni
-- 端侧 + full duplex
+### Day 12 — Depth / 3D Geometry
+camera projection / stereo / SfM / SLAM；Point/Voxel/BEV；Depth Anything / DUSt3R / VGGT。
 
-### Day 13
-- 数据清洗、去重、质量打分、配比
-- OCR / detection / 3D pseudo-label data engine
+### Day 13 — Neural 3D + Audio
+NeRF / 3DGS；ASR/Whisper/wav2vec2/VAD/diarization/codec/TTS。
 
-### Day 14
-- Alignment → Pretraining → SFT
-- LoRA / QLoRA
-- 从 low-rank 数学重新解释 LoRA
-- 手写 LoRA
+### Day 14 — Perception 闭卷
+16B 抽题；画 `image/video/audio/LiDAR → structured evidence → MLLM`。
 
-## Week 3：RL + Agent + 系统
+## Week 3 · MLLM / Generation / Data / Training / RL
 
-### Day 15
-- DPO / RM / PPO / GRPO / RLVR
-- 回看 expectation / KL / probability ratio
+### Day 15 — MLLM Architecture
+Vision Encoder → Projector/Q-Former/Resampler → LLM；dynamic resolution；multi-image/video position。
 
-### Day 16
-- visual reasoning
-- grounding reward
-- active perception
-- test-time scaling
+### Day 16 — Representative Models
+Qwen3-VL → Qwen3.5/3.8；InternVL3.5/U；Seed/GLM/Kimi/MiniCPM。重点讲“方法差异”，不背排行榜。
 
-### Day 17
-- video tokenization
-- long video retrieval
-- temporal grounding
-- object/point tracking 与 video memory
+### Day 17 — Generation
+VAE/VQ → Diffusion/DDIM/CFG → Latent Diffusion → DiT → Flow Matching → Unified Generation / World Model。
 
-### Day 18
-- Function Calling / MCP / Multimodal RAG
-- OCR / detector / depth 作为 perception tools
+### Day 18 — Data Engineering
+sampling/dedup/quality/mixture；sharding/streaming；lineage/licensing/PII；hard-negative/active learning。
 
-### Day 19
-- GUI Agent / VLA
-- action space / verifier
-- 2D/3D coordinate frame
+### Day 19 — Pretraining / SFT
+alignment/pretrain/SFT；LoRA/QLoRA；packing/token budget；long-context；checkpoint/resume。
 
-### Day 20
-- DDP / ZeRO / FSDP2
+### Day 20 — RL / Reasoning
+DPO/PPO/GRPO/RLVR；advantage/KL；rollout/verifier；active perception；reward hacking。
 
-### Day 21
-- TP / PP / EP / Sequence Parallel
-- 画 8-GPU / 64-GPU 训练方案
+### Day 21 — Safety
+indirect prompt injection；RAG poisoning；tool permissions；confirmation/sandbox；red team；agent audit log。
 
-## Week 4：Serving + 面试化
+## Week 4 · RAG / Agent / Distributed / Serving / Interview
 
-### Day 22
-- Prefill / Decode
-- KV / PagedAttention
-- Continuous Batching
+### Day 22 — Retrieval / RAG
+BM25 + dense embedding；HNSW/IVF-PQ；hybrid recall；reranker；retrieval vs generation diagnostics。
 
-### Day 23
-- FlashAttention
-- quantization
-- prefix cache
-- speculative decoding
-- 数值稳定 / dtype 回顾
+### Day 23 — Agent / GUI / VLA
+function call/MCP；planning/memory；GUI grounding；VLA action representation；closed-loop verification。
 
-### Day 24
-- vLLM / SGLang
-- multimodal serving
-- perception model + MLLM multi-service design
-- OOM diagnosis
+### Day 24 — Video / Omni
+long-video retrieval；temporal grounding；streaming ASR/audio；full-duplex/interruption。
 
-### Day 25
-- MMMU / MathVista
-- OCR / grounding / tracking / depth metrics
-- perception vs reasoning diagnostics
+### Day 25 — Distributed Training
+DDP/FSDP/ZeRO；TP/PP/EP/SP/CP；1F1B；topology；communication overlap；straggler。
 
-### Day 26
-- System Design：PDF QA / Document RAG
-- System Design：Grounded auto-labeling pipeline
+### Day 26 — Serving
+vLLM/SGLang；PagedAttention；continuous batching；chunked prefill；disaggregation；quantization/cache/admission control。
 
-### Day 27
-- System Design：长视频 QA + tracking
-- System Design：GUI/VLA + 3D perception
+### Day 27 — Evaluation
+benchmark buckets；perception vs reasoning；bootstrap CI/paired test；calibration/OOD；cost-normalized eval。
 
-### Day 28
-- 项目介绍 90 秒 / 3 分钟 / 10 分钟三个版本
-- 准备 3 个真实 bug / failure case
+### Day 28 — Code + System Design
+Attention/LoRA/IoU-NMS/Patchify；PDF QA/Video QA/GUI Agent/MLLM serving，至少做 2 道完整系统设计。
 
-### Day 29
-- 16A：Math / Deep Learning / Transformer 高频题闭卷
-- 16B：Visual Perception 高频题闭卷
-- 手写 Attention / IoU-NMS / LoRA
+### Day 29 — Project Interview
+准备项目 90 秒/3 分钟/10 分钟；3 个 controlled ablation；3 个 bad cases；2 个真实 bug/OOM；个人贡献边界。
 
-### Day 30
-- 通用 MLLM / Training / Agent / Systems 高频题
-- 完整模拟：基础 20 min + 项目 20 min + 系统设计 20 min
+### Day 30 — Full Mock
+- fundamentals 20 min；
+- model/data/training 20 min；
+- project 20 min；
+- code 20 min；
+- system design 20 min；
+- 当天只复盘暴露出的短板。
 
-## 每天打卡模板
+---
 
+## 每日打卡
 ```text
-[ ] 今日新知识点
-[ ] 5 道闭卷口述
+[ ] 5–10 道闭卷口述
 [ ] 1 个公式/shape 手推
-[ ] 1 道手写 / 小代码
-[ ] 1 个真实源码/原论文核对
+[ ] 1 道代码或一个真实源码模块
 [ ] 记录 3 个不会的问题
-[ ] 第二天优先复盘不会的问题
+[ ] 复盘前一天错误
 ```
 
 ## 通过标准
-
-不是“看完仓库”，而是：
-
-- 能解释 dot product / cosine / SVD / gradient / expectation / CE / KL；
-- 能把数学概念映射到 Attention / CLIP / LoRA / Loss / 3D；
-- Deep Learning / Transformer 基础不依赖背稿也能解释；
-- 80% 高频题能在 2 分钟内说清；
-- 能推导 Linear / Conv / Attention / KV Cache 的 shape；
-- 能解释 forward → loss → backward → optimizer 的完整训练链；
-- 能画出 YOLO / SAM / OCR pipeline / tracker / depth-to-3D / 典型 MLLM；
-- 能设计一个端到端多模态系统；
-- 项目追问 3 层后仍然能说到真实代码、数据和实验。
+- 80% 高频题能在 2 分钟内讲清；
+- 能从 shape 推导模型，不靠背图；
+- 能区分 confirmed fact 和未公开实现；
+- 能从 data/model/training/system 四层定位 bad case；
+- 能设计一个可部署、可评测、可安全回滚的端到端多模态系统。

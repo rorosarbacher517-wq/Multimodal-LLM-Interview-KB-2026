@@ -1,220 +1,161 @@
-# 04 · Representative Multimodal Models — 2026-08
-
-> 本节不背排行榜，只抓每个模型**真正值得面试的结构/训练思想**。对未公开细节明确写“未公开”。
-
-## Q1. 从 Flamingo、BLIP-2 到 LLaVA，架构演进主线是什么？
-
-- Flamingo：视觉 Resampler + 插入 LLM 的 gated cross-attention。
-- BLIP-2：Q-Former 作为冻结 vision encoder 与冻结 LLM 的信息瓶颈。
-- LLaVA：强 vision encoder + 简单 MLP projector + LLM，突出数据规模和指令微调。
-
-演进并不是“模块越来越复杂”，而是**视觉 backbone 变强、数据变大后，连接器可以更简单，同时 token/分辨率问题变成新瓶颈。**
-
-## Q2. Qwen2.5-VL 为什么值得掌握？
-
-重点不是参数量，而是三件事：
-
-- 动态分辨率，让不同尺寸图像保留更多原始信息；
-- 多模态位置编码，处理图像和视频的空间/时间位置；
-- OCR、grounding、文档、视频、视觉 agent 等能力一起进入统一 VLM。
-
-它是理解 Qwen3-VL 后续升级的直接基础。
-
-## Q3. Qwen3-VL 最核心的架构升级是什么？
-
-公开技术报告强调：
-
-1. **Interleaved-MRoPE**：更强的空间-时间位置建模；
-2. **DeepStack**：利用 ViT 多层视觉特征，而不是只用最后一层；
-3. **Text-based timestamp alignment**：用显式文本时间对齐强化视频 temporal grounding；
-4. Dense 与 MoE 多种规模，原生支持长的 interleaved multimodal context。
-
-来源：[Qwen3-VL Technical Report](https://arxiv.org/abs/2511.21631)
-
-## Q4. DeepStack 为什么能改善视觉能力？
-
-ViT 最后一层更抽象，中间层保留更细的局部和空间信息。DeepStack 把多层视觉表征更直接地送入语言侧，使模型在 OCR、空间定位、图表、细粒度识别时不完全依赖高度抽象的最后一层特征。
-
-面试要点：**多层特征融合提高信息保真度，但也增加特征传输和融合设计复杂度。**
-
-## Q5. Qwen3.5 为什么是一个重要转折？
-
-Qwen 官方把 Qwen3.5 描述为 **Unified Vision-Language Foundation**：不再只是“文本 LLM + 外挂 VLM”，而是在大规模多模态 token 上做更早、更统一的 multimodal training。
-
-公开特点还包括：
-
-- Gated Delta Networks + sparse MoE 的 hybrid architecture；
-- 大规模 agent/RL training；
-- 视觉、推理、coding、agent 一体化。
-
-来源：[Qwen3.6 / Qwen3.5 official repository](https://github.com/QwenLM/Qwen3.6)
-
-## Q6. Qwen3.6 截至 2026-08 应该怎么回答？
-
-官方把 Qwen3.6 定位为 Qwen3.5 基础上的稳定性和实际 agentic coding 升级，公开强调 agentic coding、thinking preservation 等能力。
-
-**不要**因为它继承 Qwen3.5 就自己补写未公开的视觉内部层数、projector 或视觉 loss。面试时可以说：
-
-> “官方确认它延续 native multimodal foundation 路线，但具体视觉内部设计应以公开 model card / code 为准，未披露部分不能推测。”
-
-来源：[Qwen3.6 official repository](https://github.com/QwenLM/Qwen3.6)
-
-## Q7. InternVL 系列的经典结构思路是什么？
-
-InternVL 长期强调：
-
-- 强视觉 backbone；
-- 动态切图/高分辨率输入；
-- 通过 MLP/projector 接入 LLM；
-- 多图、视频、OCR、文档能力共同训练。
-
-其特点是非常重视**高分辨率感知能力与大模型推理能力之间的工程折中。**
-
-## Q8. InternVL3.5 的三项面试重点？
-
-1. **Cascade RL**：offline RL → online RL，分阶段增强 reasoning；
-2. **Visual Resolution Router (ViR)**：按输入动态调整视觉分辨率/token；
-3. **Decoupled Vision-Language Deployment (DvD)**：视觉 encoder 与 LLM 分到不同 GPU，改善负载平衡。
-
-这说明现代 MLLM 的“架构创新”已经同时覆盖模型、RL 和 serving。
-
-来源：[InternVL3.5](https://arxiv.org/abs/2508.18265)
-
-## Q9. ViR 为什么不是简单 resize？
-
-固定 resize 不考虑任务信息需求。Resolution Router 试图根据输入决定视觉计算预算：简单图像少 token，复杂文档/高细节图像多 token。
-
-本质是 **adaptive compute**：让模型在准确率、视觉 token 数、prefill latency 之间动态取舍。
-
-## Q10. GLM-4.5V / GLM-4.6V 的重点是什么？
-
-GLM-V 路线强调 multimodal reasoning + RL + agent：
-
-- GLM-4.5V 延续 reasoning-centric VLM training；
-- GLM-4.6V 扩展到 128K context，并公开强调 **native multimodal function calling**；
-- 视觉输入/输出可以直接进入工具调用链，而不是先全部转文字。
-
-来源：[GLM-V official repository](https://github.com/zai-org/GLM-V)
-
-## Q11. GLM-5V-Turbo 为什么值得 2026 面试关注？
-
-它明确把目标从“VLM 能看懂图”推进到 **native multimodal agent foundation model**：视觉感知直接参与 reasoning、planning、tool use 和 execution。
-
-面试价值：理解未来多模态模型的评价标准不只是 VQA，而是完整的 **perceive → reason → act → verify**。
-
-来源：[GLM-5V-Turbo Technical Report](https://arxiv.org/abs/2604.26752)
-
-## Q12. Seed1.5-VL 的结构和定位？
-
-公开报告：
-
-- 532M vision encoder；
-- MoE LLM，20B active parameters；
-- 覆盖 OCR、diagram、grounding、3D spatial understanding、video、GUI/game agent；
-- 强调从 model design、data construction 到多阶段 training 的完整经验。
-
-对数据策略/模型数据工程岗位尤其值得读。
-
-来源：[ByteDance Seed1.5-VL](https://github.com/ByteDance-Seed/Seed1.5-VL)
-
-## Q13. Kimi-VL 的核心亮点？
-
-Kimi-VL 是高效 MoE VLM：
-
-- language decoder 只激活约 2.8B parameters；
-- MoonViT 强调 native-resolution visual encoding；
-- 128K long context；
-- Kimi-VL-Thinking 通过 long-CoT SFT + RL 强化视觉推理。
-
-它适合回答“**小 active parameter 如何同时做高分辨率、长上下文和 reasoning**”。
-
-来源：[Kimi-VL Technical Report](https://arxiv.org/abs/2504.07491)
-
-## Q14. MiniCPM-V 4.6 为什么代表端侧路线？
-
-截至 2026-08，官方公开的 MiniCPM-V 4.6：
-
-- 基于 SigLIP2-400M + Qwen3.5-0.8B；
-- 约 1.3B 级别；
-- 引入 **mixed 4x/16x visual-token compression**；
-- 明确面向 iOS / Android / HarmonyOS 等端侧部署。
-
-面试重点：**token compression 不只是省 LLM FLOPs，还能直接影响端侧内存和延迟。**
-
-来源：[MiniCPM-V official repository](https://github.com/OpenBMB/MiniCPM-V)
-
-## Q15. MiniCPM-o 4.5 的 full-duplex 是什么？
-
-全双工意味着：输入视频/音频流与输出文本/语音流可以同时进行，用户不必“说完一句→模型再开始说”。
-
-系统要同时解决：
-
-- streaming encoder；
-- turn-taking / interruption；
-- 音视频同步；
-- 低延迟 speech generation；
-- 状态持续更新。
-
-来源：[MiniCPM-V / MiniCPM-o official repository](https://github.com/OpenBMB/MiniCPM-V)
-
-## Q16. Qwen3-Omni 的 Thinker–Talker 怎么理解？
-
-公开架构用 MoE-based **Thinker–Talker**：
-
-- Thinker：多模态理解、语义推理；
-- Talker：面向流式语音生成；
-- multi-codebook 设计用于高效语音生成；
-- 支持 text/image/audio/video 输入和实时 text/speech 输出。
-
-来源：[Qwen3-Omni](https://github.com/QwenLM/Qwen3-Omni)
-
-## Q17. Llama 4 的多模态 + MoE 面试怎么讲？
-
-Meta 公开将 Llama 4 Scout/Maverick 描述为 natively multimodal MoE 系列。回答重点：
-
-- 多模态从训练中原生加入，而不是推理时外挂；
-- MoE 要区分 total / active params；
-- 超长上下文和多模态 token 使 capacity 与 serving efficiency 同时成为核心问题。
-
-来源：[Meta Llama 4 official announcement](https://ai.meta.com/blog/llama-4-multimodal-intelligence/)
-
-## Q18. Gemma 3 代表什么设计取向？
-
-Gemma 3 是“轻量开放 VLM + 长上下文效率”路线：
-
-- SigLIP vision encoder；
-- 视觉能力覆盖多种尺寸；
-- 通过 local/global attention 配比降低长 context 的 KV/cache 成本；
-- 适合讨论单卡/边缘场景的质量-效率折中。
-
-来源：[Gemma 3 Technical Report](https://arxiv.org/abs/2503.19786)
-
-## Q19. Janus-Pro 为什么把理解和生成视觉编码解耦？
-
-视觉理解需要语义判别表征；图像生成需要适合重建/生成的视觉表示。强行共享同一编码器可能产生目标冲突。
-
-Janus 路线的启示：**统一模型不等于所有任务必须共享完全相同的视觉表征。**
-
-来源：[Janus-Pro](https://arxiv.org/abs/2501.17811)
-
-## Q20. STEP3-VL-10B 带来的 2026 新趋势是什么？
-
-其报告强调：
-
-- fully unfrozen multimodal pretraining；
-- 大规模 RL post-training；
-- Parallel Coordinated Reasoning（PaCoRe）用于 test-time compute scaling。
-
-这代表趋势从“训练一个更大 VLM”进一步走向 **训练阶段 + RL + test-time perceptual reasoning 共同扩展能力**。
-
-来源：[STEP3-VL-10B](https://arxiv.org/abs/2601.09668)
+# 04 · Representative Multimodal Models — 2026-08-19
+
+> 本节不背排行榜，只抓每个模型**真正值得面试的结构、训练和系统思想**。
+>
+> 规则：只写论文、官方 GitHub、官方 model card 能确认的内容；未公开的 vision encoder / projector / loss 明确写“未公开”。
 
 ---
 
-### 闭源模型统一回答原则
+## Q1. Flamingo → BLIP-2 → LLaVA 的架构演进主线？
+- Flamingo：Resampler + gated cross-attention。
+- BLIP-2：Q-Former 在冻结视觉塔与冻结 LLM 之间做信息瓶颈。
+- LLaVA：强 vision encoder + 简单 projector + LLM，强调 instruction data。
 
-GPT、Gemini、Claude 等如果官方没公开 vision encoder / projector / loss：
+核心趋势不是 adaptor 越来越复杂，而是**backbone/data 变强后 connector 可以更简单，视觉 token 与分辨率成为新瓶颈**。
 
-> 可以说公开的输入输出模态、context、工具和产品能力；内部结构明确标注“官方未披露”。
+## Q2. Qwen2.5-VL 为什么仍值得掌握？
+重点是动态分辨率、空间/时间位置编码，以及 OCR、grounding、video、agent 任务的统一训练。它是理解 Qwen3-VL 的直接前置。
 
-这比编一个“可能用了 CLIP/SigLIP”专业得多。
+Primary: https://arxiv.org/abs/2502.13923
+
+## Q3. Qwen3-VL 最核心的公开升级？
+公开技术报告强调：
+1. **Interleaved-MRoPE**；
+2. **DeepStack** 多层视觉特征；
+3. text-based timestamp alignment；
+4. dense/MoE 与长 interleaved multimodal context。
+
+Primary: https://arxiv.org/abs/2511.21631
+
+## Q4. DeepStack 为什么有意义？
+最后一层 ViT 更偏抽象语义，中间层通常保留更多局部/空间细节。多层特征能改善 OCR、grounding、fine-grained perception，但增加 feature bandwidth 和融合复杂度。
+
+## Q5. Qwen3.5 为什么是一个重要转折？
+Qwen 官方把 Qwen3.5 描述为 **Unified Vision-Language Foundation**，强调 early fusion 的大规模多模态训练，并公开：
+- Gated Delta Networks + sparse MoE hybrid architecture；
+- scalable RL；
+- multimodal/agent capability 统一。
+
+Primary: https://github.com/QwenLM/Qwen3.8
+
+## Q6. Qwen3.6 应该怎么准确回答？
+官方说明 Qwen3.6 建立在 Qwen3.5 的基础上，重点强化 **agentic coding、thinking preservation 和实际稳定性**。
+
+不要把“继承 Qwen3.5 foundation”进一步推断成每个 Qwen3.6 checkpoint 都公开了新的视觉塔结构；具体模态支持与内部细节要看对应 model card。
+
+Primary: https://github.com/QwenLM/Qwen3.8
+
+## Q7. 截至 2026-08-19，Qwen3.8 的定位是什么？
+Qwen3.8 是 Qwen3.5 open-model series 当前最新公开线路。官方仓库说明它**built on the architectural foundation of Qwen3.5**，重点提升 coding、professional work、research、long-horizon agentic tasks 与 agent execution。
+
+2026-08-12 发布 Qwen3.8-2.4T-A95B，2026-08-14 发布 Qwen3.8-27B。面试时不应凭“3.8”名称自行补写新的 vision encoder/projector；模态与实现按具体 model card 核对。
+
+Primary: https://github.com/QwenLM/Qwen3.8
+
+## Q8. InternVL 系列的经典结构思路？
+- 强视觉 backbone；
+- dynamic tiling / high resolution；
+- MLP/projector 接入 LLM；
+- OCR、document、multi-image、video 共同训练。
+
+特点是一直重视**高分辨率感知与 LLM token/compute 的平衡**。
+
+## Q9. InternVL3.5 的三个面试重点？
+1. Cascade RL；
+2. Visual Resolution Router (ViR)；
+3. Decoupled Vision-Language Deployment (DvD)。
+
+说明现代 MLLM 创新已经同时覆盖 model、post-training 和 serving。
+
+Primary: https://arxiv.org/abs/2508.18265
+
+## Q10. ViR 为什么不是普通 Resize？
+它要做的是 adaptive compute：根据视觉输入/任务动态分配 resolution/token budget，而不是固定规则把所有图缩成同样大小。
+
+## Q11. InternVL-U 为什么需要加入 2026 知识图？
+InternVL-U 是公开的 unified multimodal 方向：约 4B 参数，覆盖**understanding、reasoning、image generation、image editing**，把 MLLM 与 MMDiT-style generation head 放入同一系统。
+
+它代表 MLLM 从“只理解多模态”继续走向“理解 + 生成统一”。
+
+Primary: https://arxiv.org/abs/2603.09877
+
+## Q12. GLM-4.5V / GLM-4.6V 的重点？
+GLM-V 路线强调 multimodal reasoning + RL + agent。公开线路进一步支持长 context 与 multimodal function calling。
+
+具体 checkpoint 的内部 vision 结构按官方 repo/model card，不从产品能力反推未公开架构。
+
+Primary: https://github.com/zai-org/GLM-V
+
+## Q13. GLM-5V-Turbo 为什么值得关注？
+公开技术报告把目标推进到 **native multimodal agent**：视觉感知直接参与 reasoning、planning、tool use、execution。
+
+面试框架：`perceive → reason → act → verify`。
+
+Primary: https://arxiv.org/abs/2604.26752
+
+## Q14. Seed1.5-VL 的公开结构与定位？
+公开报告给出 532M vision encoder + MoE LLM（20B active parameters），覆盖 OCR、diagram、grounding、3D spatial understanding、video、GUI/game agent，并系统讨论 data/model/training。
+
+Primary: https://arxiv.org/abs/2505.07062
+
+## Q15. Kimi-VL 的核心亮点？
+- 高效 MoE language decoder，约 2.8B active；
+- MoonViT 面向 native-resolution visual encoding；
+- long context；
+- Thinking 版本结合 long-CoT SFT + RL。
+
+Primary: https://arxiv.org/abs/2504.07491
+
+## Q16. MiniCPM-V 4.6 为什么代表端侧路线？
+官方公开版本采用 SigLIP2-400M + Qwen3.5-0.8B，约 1.3B，并强调 mixed `4×/16×` visual-token compression 与端侧部署。
+
+面试重点：**压 visual tokens 同时降低 LLM prefill、内存和端侧延迟**。
+
+Primary: https://github.com/OpenBMB/MiniCPM-V
+
+## Q17. MiniCPM-o 4.5 的 Full-Duplex 是什么？
+输入 audio/video 与输出 speech/text 可以持续并行流动，需要处理 turn-taking、interruption、streaming cache 和模态同步。
+
+Primary: https://github.com/OpenBMB/MiniCPM-V
+
+## Q18. Qwen3-Omni 的 Thinker–Talker 怎么理解？
+公开架构采用 MoE-based Thinker–Talker：
+- Thinker：multimodal understanding/reasoning；
+- Talker：streaming speech generation；
+- multi-codebook 用于 speech representation/generation。
+
+Primary: https://github.com/QwenLM/Qwen3-Omni
+
+## Q19. Llama 4 多模态 + MoE 怎么讲？
+Meta 公开把 Scout/Maverick 描述为 natively multimodal MoE。面试重点：
+- native multimodal training；
+- total vs active parameters；
+- long-context multimodal serving 的 capacity/efficiency trade-off。
+
+Primary: https://ai.meta.com/blog/llama-4-multimodal-intelligence/
+
+## Q20. Gemma 3 代表什么设计取向？
+轻量开放 VLM + 长 context efficiency：SigLIP vision encoder，并通过 local/global attention 等设计控制长上下文成本。
+
+Primary: https://arxiv.org/abs/2503.19786
+
+## Q21. Janus-Pro 为什么解耦 Understanding / Generation 表示？
+理解需要判别性语义表示；生成需要高保真可重建表示。Janus 路线说明：**统一 Transformer 不等于所有任务必须共享完全相同的视觉 encoder**。
+
+Primary: https://arxiv.org/abs/2501.17811
+
+## Q22. STEP3-VL-10B 代表什么趋势？
+报告强调 fully-unfrozen multimodal pretraining、大规模 RL 与 PaCoRe test-time perceptual reasoning。
+
+趋势：能力扩展同时来自 **pretraining + post-training + inference-time compute**。
+
+Primary: https://arxiv.org/abs/2601.09668
+
+---
+
+## 闭源模型统一回答原则
+GPT / Gemini / Claude 等，如果官方没公开 vision encoder、projector、loss、training mixture：
+
+> 可以讨论官方公开的输入输出模态、context、工具和产品能力；内部结构明确标注“not publicly disclosed”。
+
+这比用开源 VLM 架构去猜闭源模型专业得多。
