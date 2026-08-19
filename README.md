@@ -21,6 +21,7 @@
 | [00 Roadmap](./00_Roadmap/README.md) | 学习顺序与知识地图 | — |
 | [01 Transformer & LLM Fundamentals](./01_Transformer_LLM_Fundamentals/README.md) | Attention、RoPE、GQA、MoE、KV Cache | 18 |
 | [02 Vision Fundamentals](./02_Vision_Fundamentals/README.md) | CNN、ViT、CLIP、SigLIP、DINO、视觉 token | 16 |
+| [02B Detection / Segmentation / Grounding](./02B_Detection_Segmentation_Grounding/README.md) | YOLOv8–11/26、DETR、RT-DETR、SAM2、GroundingDINO、Grounded SAM | 22 |
 | [03 Multimodal Core Architecture](./03_Multimodal_Core_Architecture/README.md) | Projector、Q-Former、Resampler、动态分辨率、融合 | 18 |
 | [04 Representative Models 2026](./04_Representative_Models_2026/README.md) | Qwen3/3.5、InternVL、GLM、Seed、Kimi、MiniCPM、Omni | 20 |
 | [05 Multimodal Data Engineering](./05_Multimodal_Data_Engineering/README.md) | 数据获取、清洗、去重、配比、合成、污染 | 16 |
@@ -44,30 +45,30 @@
 ### 模型结构题
 
 1. **输入是什么？** 例如 `[B, 3, H, W]`、视频 `[B,T,3,H,W]`。
-2. **怎么变 token？** 视觉编码器输出 `[B,N,Dv]`。
-3. **怎么和 LLM 对齐？** Projector / Q-Former / Resampler：`Dv → Dl`，必要时 `N → N'`。
-4. **在哪里做跨模态交互？** 拼接 self-attention、cross-attention、early fusion 或 hybrid fusion。
-5. **怎么训练？** 预训练、SFT、偏好优化/RL，各阶段哪些参数冻结。
-6. **怎么算成本？** 视觉 token、prefill、KV cache、MoE active params、并行通信。
+2. **怎么变 token / feature map？** ViT 常是 `[B,N,D]`；detector 常保留 P3/P4/P5 多尺度 feature maps。
+3. **任务头是什么？** LLM projector、detection head、object queries、mask decoder 还是 tool interface。
+4. **在哪里做跨模态交互？** 拼接 self-attention、cross-attention、region-text alignment 或 language-guided queries。
+5. **怎么训练？** 预训练、SFT、matching、box/mask loss、偏好优化/RL，各阶段哪些参数冻结。
+6. **怎么算成本？** 视觉 token、feature-map resolution、prefill、KV cache、NMS、MoE active params、并行通信。
 
 ### 数据题
 
-**目标能力 → 数据寻源 → 解析 → 清洗 → 去重 → 质量打分 → 配比 → 合成 → 训练反馈 → 再迭代。**
+**目标能力 → 数据寻源 → 解析 → 清洗 → 去重 → 质量打分 → 配比 → 合成/伪标签 → 训练反馈 → 再迭代。**
 
 ### 系统题
 
-**SLO → 模型/数据规模 → 显存预算 → 并行方式 → batch/scheduling → kernel/cache → 监控 → 降级。**
+**SLO → 模型/数据规模 → 显存预算 → 并行方式 → batch/scheduling → kernel/cache → 视觉工具链 → 监控 → 降级。**
 
 ## 可信度规则
 
 - 最新模型只采用 **论文、官方 GitHub、官方技术报告、官方文档** 可确认的信息。
 - 对 GPT / Gemini / Claude 等闭源模型，**公开能力不等于公开内部架构**；官方未披露的 vision encoder、projector、训练数据和 loss 不猜。
+- YOLO 的版本号不等于同一团队的线性 lineage；先核对论文/官方实现来源。
 - benchmark 数字会随评测设置变化；仓库重点解释机制，不靠排行榜背诵。
-- “Thinking / reasoning content” 的产品接口不等价于完整暴露内部推理过程。
 
 ## 推荐使用方式
 
-- **第一遍**：00 → 01 → 02 → 03，先打通底层。
+- **第一遍**：00 → 01 → 02 → **02B** → 03，先打通 LLM + Vision + Detection/Segmentation/Grounding 底层。
 - **第二遍**：04 → 05 → 06 → 07，掌握 2026 多模态主线。
 - **第三遍**：08 → 09 → 10 → 11，补 Agent 与工程。
 - **第四遍**：13 手写 + 14 系统设计 + 15 项目面试。
@@ -75,4 +76,4 @@
 
 ## Status
 
-**Final 2026-08 interview edition.** 后续更新只补新增的重要模型、论文和真实面试问题，不为凑数量添加低价值题。
+**Final 2026-08 interview edition.** 已补齐 YOLO、DETR、SAM、GroundingDINO 等视觉感知基础；后续只补新增的重要模型、论文和真实面试问题。

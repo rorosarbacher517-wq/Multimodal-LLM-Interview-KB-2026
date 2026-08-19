@@ -7,7 +7,10 @@
     ↓
 Transformer / LLM
     ↓
-ViT / CLIP /视觉编码
+CNN / ViT / CLIP / SigLIP / DINOv2
+    ↓
+Detection / Segmentation / Grounding
+YOLO / DETR / RT-DETR / SAM / GroundingDINO
     ↓
 Vision Encoder → Connector → LLM
     ↓
@@ -26,14 +29,19 @@ Evaluation / System Design / Project Interview
 
 - Self-Attention 为什么能建模长距离依赖？
 - `Q/K/V` 的 shape 怎么变化？
-- Multi-Head Attention 为什么要多头？
 - RoPE、GQA、KV Cache、MoE 各解决什么问题？
 - 图像怎么从 `[3,H,W]` 变成视觉 token？
+- YOLO 为什么要 P3/P4/P5 多尺度检测？
+- NMS、one-to-many、one-to-one matching 有什么关系？
+- SAM 为什么可以用 point / box / mask 做 prompt？
+- GroundingDINO 为什么能把自然语言短语映射到 box？
 - Vision Encoder 和 LLM hidden size 不一样怎么办？
 
 如果这些说不清，多模态模型结构题很容易变成背模型名。
 
-## 第二层：必须能画出一个 MLLM
+## 第二层：必须能画出两类视觉链路
+
+### A. MLLM
 
 ```text
 Image / Video
@@ -52,27 +60,38 @@ LLM
 Text / Coordinates / Tool Call / Action
 ```
 
+### B. Grounded Perception
+
+```text
+Image → detector / grounding model → boxes
+Text ────────────────────────────────↑
+                         ↓
+                      SAM / SAM2
+                         ↓
+                     pixel masks
+```
+
 你必须能够解释：
 
 - `N` 从哪里来；
 - 为什么 `N'` 可能比 `N` 小；
-- 为什么 `Dv` 要变成 `Dl`；
-- image/video 的位置编码怎么做；
+- 为什么 detector 更喜欢保留多尺度 feature map；
+- 640 输入为什么常得到 80×80 / 40×40 / 20×20；
+- object queries 如何与 GT 匹配；
+- prompt / box / mask 如何在 SAM 中交互；
 - 最终 loss 到底监督谁。
 
 ## 第三层：2026 必须掌握的变化
 
-2024 的面试常问“LLaVA 是什么”；2026 更容易继续追问：
-
-- 为什么模型开始做 **native / dynamic resolution**？
-- 为什么视觉 token 压缩越来越重要？
-- Qwen3-VL 的 **DeepStack、Interleaved-MRoPE、timestamp alignment** 分别解决什么？
-- Qwen3.5 为什么从独立 VLM 走向 **native multimodal foundation model**？
-- InternVL3.5 的 ViR 为什么既是模型问题也是系统问题？
-- MoE 的 total params 和 active params 有什么区别？
-- 如何通过 RL 提升视觉 reasoning，而不是只让回答变长？
-- GUI Agent 如何从 screenshot 走到 click/action？
-- 全双工 Omni 模型为什么比 ASR→LLM→TTS 串联更难？
+- Dynamic / native resolution 与 visual-token compression。
+- Qwen3-VL 的 DeepStack、Interleaved-MRoPE、timestamp alignment。
+- InternVL3.5 ViR 与 vision-language decoupled serving。
+- YOLO26 的 end-to-end NMS-free、DFL-free 路线。
+- YOLOE-26 / GroundingDINO / DINO-X 的 open-vocabulary perception。
+- SAM 2 的 streaming memory 与视频对象传播。
+- Grounded SAM 2 的 text → box → mask → tracking 工具链。
+- RL 如何提升视觉 reasoning，而不是只让回答变长。
+- GUI Agent 如何从 screenshot 走到 grounding / click / action。
 
 ## 第四层：算法工程必须能落地
 
@@ -84,20 +103,22 @@ Text / Coordinates / Tool Call / Action
 - visual token 数；
 - attention 复杂度；
 - LoRA 参数量；
+- detector feature-map 尺寸；
+- IoU / NMS；
 - FSDP/TP/PP/EP 各切什么。
 
 至少会解释：
 
 - OOM 从哪里排查；
-- 多模态 batch 为什么比文本 batch 更难做；
-- 长视频为什么容易把 prefill 打爆；
-- vLLM / SGLang 如何管理多模态请求；
-- 为什么线上不能只追求 benchmark accuracy。
+- 高分辨率输入如何影响 token/feature map；
+- 自动标注如何用 GroundingDINO + SAM 产生伪标签；
+- 为什么线上可用轻量 YOLO student，而 teacher 用更强 open-world model；
+- vLLM / SGLang 如何管理多模态请求。
 
 ## 最推荐的复习顺序
 
-### Week 1：底层
-01 Transformer → 02 Vision → 03 Multimodal architecture
+### Week 1：底层视觉 + Transformer
+01 Transformer → 02 Vision → **02B Detection/Segmentation/Grounding** → 03 Multimodal architecture
 
 ### Week 2：模型与训练
 04 Representative models → 05 Data → 06 Pretrain/SFT → 07 RL
@@ -110,13 +131,13 @@ Text / Coordinates / Tool Call / Action
 
 ## 一个判断标准
 
-对任何一个新模型，不需要背全部参数。只要能回答下面 8 个问题，就基本理解了：
+对任何一个新视觉/多模态模型，不需要背全部参数。优先回答：
 
-1. Vision encoder 是什么？
-2. 图像/视频如何 token 化？
-3. Connector 是什么？有没有压 token？
-4. 视觉 token 在哪里进入 LLM？
-5. 位置和时间如何编码？
-6. 训练分几阶段？
-7. 后训练如何增强 reasoning/agent？
-8. 推理成本主要在哪里？
+1. 输入是什么？
+2. Backbone / Vision Encoder 是什么？
+3. 空间分辨率和 token/feature-map 如何变化？
+4. Head / Connector / Query / Prompt 是什么？
+5. 训练时如何 assignment / matching / loss？
+6. 是否 closed-set / open-vocabulary / promptable？
+7. 推理是否需要 NMS、memory、tool call？
+8. 成本主要在哪里？
