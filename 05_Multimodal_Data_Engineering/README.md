@@ -1,6 +1,8 @@
 # 05 · Multimodal Data Engineering
 
 > 对模型数据岗，最重要的不是“我会清洗数据”，而是能从**能力目标 → 数据定义 → 生产 → 训练反馈 → 再迭代**讲完整闭环。
+>
+> Agent 的 trajectory schema、environment rollout、recovery data、tool schema versioning、executable verification 单独见 **[Agent Data Engineering](./AGENT_DATA.md)**。
 
 ## Q1. 多模态大模型训练数据有哪些大类？
 
@@ -130,7 +132,7 @@ state/screenshot
 → reward/success
 ```
 
-训练重点不只是 next action，还包括长期任务成功与错误恢复。
+训练重点不只是 next action，还包括长期任务成功与错误恢复。更完整的 schema/rollout/verifier 见 [Agent Data Engineering](./AGENT_DATA.md)。
 
 ## Q12. 合成多模态数据怎么生产？
 
