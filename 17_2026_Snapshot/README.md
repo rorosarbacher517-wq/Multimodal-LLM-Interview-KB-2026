@@ -64,32 +64,71 @@ Embedding / Reranker 开始统一 text、image、document image、video，用于
 
 ## 12. YOLO26：实时检测也走向 End-to-End
 
-Ultralytics 2026 的 YOLO26 默认采用 **NMS-free end-to-end inference**，并移除 DFL regression；公开训练配方还包含 Progressive Loss、STAL 与 MuSGD。
+Ultralytics 2026 的 YOLO26 默认采用 NMS-free end-to-end inference，并移除传统 DFL regression 路线。
 
 - Docs: https://docs.ultralytics.com/models/yolo26
-- Paper: https://arxiv.org/abs/2606.03748
 
-**面试关键词：** one-to-one head、NMS-free、DFL-free、edge deployment。
+## 13. Open-Vocabulary Real-Time Detection：YOLOE / GroundingDINO / DINO-X
 
-## 13. Open-Vocabulary Real-Time Detection：YOLOE-26
+开放词汇感知正在从大型 Transformer detector 扩展到更实时、可部署的检测与分割模型。
 
-YOLOE-26 把文本/视觉/prompt-free detection & segmentation 与 YOLO26 的实时 NMS-free 路线结合。
-
-- Docs: https://docs.ultralytics.com/models/yoloe
-
-这说明开放词汇感知不再只是大型 Transformer detector 的能力，正在快速进入实时部署模型。
+- YOLOE: https://arxiv.org/abs/2503.07465
+- GroundingDINO: https://arxiv.org/abs/2303.05499
+- DINO-X: https://arxiv.org/abs/2411.14347
 
 ## 14. SAM 2 + GroundingDINO：视觉工具开始模块化组合
 
-SAM 2 使用 streaming memory 做 image/video promptable segmentation；GroundingDINO / DINO-X 提供 text-to-box open-world grounding。Grounded SAM 2 把两者组合成 text → box → mask → tracking pipeline。
+SAM 2 使用 streaming memory 做 image/video promptable segmentation；GroundingDINO 提供 text-to-box grounding。Grounded SAM 2 把两者组合成 text → box → mask → tracking pipeline。
 
 - SAM 2: https://github.com/facebookresearch/sam2
 - GroundingDINO: https://github.com/IDEA-Research/GroundingDINO
 - Grounded SAM 2: https://github.com/IDEA-Research/Grounded-SAM-2
 
-**面试价值：** 自动标注、视频跟踪、GUI/robot perception tool、MLLM agent tool use。
+## 15. PaddleOCR-VL-1.6：Document AI 已进入小型专用 VLM 阶段
 
-## 15. 当前最重要的 10 条技术主线
+2026 年 PaddleOCR-VL-1.6 延续 `layout analysis → element crop → VLM recognition → reading-order merge` 的专用文档解析路线。重点不只是 OCR，而是 text、formula、table、chart、seal 和复杂页面结构恢复。
+
+- Official: https://github.com/PaddlePaddle/PaddleOCR
+- Docs: https://github.com/PaddlePaddle/PaddleOCR/blob/main/docs/version3.x/pipeline_usage/PaddleOCR-VL.en.md
+
+**面试关键词：** layout-first、native-resolution crop、document structure、specialized VLM。
+
+## 16. MinerU2.5-Pro：Document AI 的瓶颈越来越像 Data Engineering 问题
+
+MinerU2.5 已采用 coarse-to-fine 高分辨率解析；2026 的 MinerU2.5-Pro 在保持 1.2B 级架构基本不变的情况下，重点扩大数据覆盖、难例采样、跨模型一致性校验和 judge-and-refine 标注，并加入 progressive training / GRPO alignment。
+
+- MinerU2.5: https://arxiv.org/abs/2509.22186
+- MinerU2.5-Pro: https://arxiv.org/abs/2604.04771
+- Repo: https://github.com/opendatalab/MinerU
+
+**面试关键词：** data engine、hard-sample mining、annotation verification、coarse-to-fine parsing。
+
+## 17. Tracking：从 Box Identity 扩展到 Track Any Point
+
+传统 MOT 仍以 ByteTrack / BoT-SORT / OC-SORT 等 tracking-by-detection 为核心；CoTracker3 则代表 transformer-based point tracking，可联合跟踪任意 query points，并通过 pseudo-labelled real videos 缩小 synthetic-to-real gap。
+
+- ByteTrack: https://github.com/FoundationVision/ByteTrack
+- OC-SORT: https://github.com/noahcao/OC_SORT
+- CoTracker3: https://github.com/facebookresearch/co-tracker
+
+**面试关键词：** association、ID switch、point tracks、visibility、pseudo-label video。
+
+## 18. VGGT → VGGT-Ω：3D Geometry Foundation 正在快速扩展
+
+VGGT 把 camera pose、intrinsics、depth、point maps、3D tracks 放到一个 feed-forward geometry model 里。2026 的 VGGT-Ω 进一步支持动态场景，并通过 registers / register attention 和更简化的 dense prediction head 降低训练内存、扩大数据规模。
+
+- VGGT: https://github.com/facebookresearch/vggt
+- VGGT-Ω: https://arxiv.org/abs/2605.15195
+
+**面试关键词：** feed-forward reconstruction、point map、camera pose、register attention、dynamic scenes、VLA spatial representation。
+
+## 19. Point Cloud Foundation：2D–3D Joint Pretraining 变得更重要
+
+Pointcept 在 2025–2026 持续推进 Sonata、Concerto、Utonia 等通用点云 encoder。趋势是从单任务 3D segmentation/detection 转向 reusable 3D representation，并加强 image–point-cloud joint learning。
+
+- Official: https://github.com/Pointcept/Pointcept
+
+## 20. 当前最重要的 14 条技术主线
 
 1. Native multimodal pretraining；
 2. Dynamic/native resolution；
@@ -100,12 +139,16 @@ SAM 2 使用 streaming memory 做 image/video promptable segmentation；Groundin
 7. GUI/tool/agent integration；
 8. Omni streaming + efficient serving；
 9. Open-vocabulary detection / grounding；
-10. Promptable segmentation + model-in-the-loop data engine。
+10. Promptable segmentation + model-in-the-loop data engine；
+11. Document parsing VLM + structured RAG；
+12. Point/object tracking + video memory；
+13. Feed-forward 3D geometry foundation models；
+14. 2D–3D joint representation learning for VLA/world models。
 
-## 16. 哪些内容不要编？
+## 21. 哪些内容不要编？
 
 对闭源模型或未充分披露版本：vision encoder、hidden size、projector、MoE routing、pretraining data composition、loss，如果官方未披露，就明确 unknown / not publicly disclosed。
 
-对于 YOLO11 等没有正式论文的版本，架构细节优先引用官方 YAML/docs；对于 Grounding DINO 1.6 等后续服务版本，如果没有同等完整论文，不自行推断训练配方。
+对视觉感知模型也一样：具体 layer、参数量、训练数据、损失配比优先回官方代码/论文核对；不要把社区实现细节写成原模型事实。
 
 **截至 2026，可信地说清楚公开事实，比背一份看似完整但混有猜测的架构表更重要。**
