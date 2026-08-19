@@ -64,7 +64,7 @@ The earlier structure was already strong for MLLM understanding and visual perce
 
 ## Machine audit result
 
-GitHub Actions workflow: **Knowledge Base Audit — run #3 — SUCCESS**.
+GitHub Actions workflow: **Knowledge Base Audit — final validation run #4 — SUCCESS**.
 
 ```text
 Markdown files: 134
