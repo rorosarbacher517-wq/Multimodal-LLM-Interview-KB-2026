@@ -1,5 +1,17 @@
 # Changelog
 
+## 2026-08 Agent Engineering Expansion
+
+- Added `09B Agent Fundamentals & Engineering` with Agent Loop, tool use, planning, context/memory, multi-agent orchestration, MCP/A2A, Web/GUI/Coding Agent, Agent data/RL, evaluation, sandbox and production runtime.
+- Added `16C Agent High Frequency` with 80 closed-book interview questions.
+- Added Agent-specific deep dives in the correct modules:
+  - `05_Multimodal_Data_Engineering/AGENT_DATA.md`;
+  - `07_PostTraining_RL_Reasoning/AGENT_RL.md`;
+  - `12_Evaluation_Diagnostics/AGENT_EVAL.md`;
+  - `14_System_Design/AGENT_SYSTEM_DESIGN.md`.
+- Updated the 2026 snapshot with MCP `2026-07-28`, A2A, harness/sandbox separation, durable execution and long-horizon agent evaluation.
+- Updated Roadmap, 30-Day Plan and primary references so Agent knowledge forms a full dependency chain rather than a single overview page.
+
 ## 2026-08 Final Interview Edition
 
 - Rebuilt the repository around a complete MLLM interview knowledge chain.
