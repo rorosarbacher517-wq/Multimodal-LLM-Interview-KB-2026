@@ -1,5 +1,7 @@
 # 12 · Evaluation & Diagnostics
 
+> Agent 的 end-to-end success、partial completion、recovery、cost、safety、OSWorld/BrowserGym 和 trajectory-level diagnosis 见 **[Agent Evaluation & Diagnostics](./AGENT_EVAL.md)**。
+
 ## Q1. 为什么不能用一个 benchmark 判断 MLLM 强不强？
 
 多模态能力是多维的：
@@ -136,6 +138,8 @@ Agent 成功依赖环境状态，单纯字符串 match 不够。
 - action side effects；
 - 安全约束；
 - 是否利用 evaluator bug。
+
+完整 Agent 评测见 [Agent Evaluation & Diagnostics](./AGENT_EVAL.md)。
 
 ## Q13. Offline Eval 和 Online Eval 怎么配合？
 
